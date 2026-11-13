@@ -430,7 +430,7 @@ async function importFile(file){
 
 let lang=store.get('gtravel-lang')||(navigator.language||'pt').slice(0,2);
 if(!I18N[lang])lang='pt';
-let st={tab:store.get('gtravel-tab')||'cal',view:store.get('gtravel-view')||'month',y:0,m:0};
+let st={tab:'cal',view:'month',y:0,m:0};
 const T=()=>I18N[lang];
 const tx=o=>o==null?'':typeof o==='string'?o:(o[lang]??o[TRIP.sourceLanguage||'pt']??Object.values(o)[0]??'');
 const loc=()=>LANGS[lang].loc;
