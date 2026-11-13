@@ -1,4 +1,4 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style></head><body><title>G-Travel</title>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style><title>G-Travel</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#1a4f8b">
 <meta name="mobile-web-app-capable" content="yes">
@@ -181,6 +181,13 @@ a.btn{text-decoration:none}
 .opt:disabled{opacity:.5;cursor:default}
 .opt b{font-size:16px}
 .small{font-size:13px}
+.pill.icon{padding:4px 9px}
+.inv{border:0;background:transparent;padding:10px 6px;cursor:pointer;font-size:17px}
+.chk{display:flex;gap:8px;align-items:center;font-size:15px}
+.linkbox{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font:13px var(--f-num);background:var(--bg);color:var(--fg);resize:none}
+.howto{font-size:14px;line-height:1.5}
+.welcome{align-items:stretch;text-align:left}
+.wicon{width:56px;height:56px;border-radius:14px}
 .langs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .lang{border:1.5px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:12px;font-size:15px;cursor:pointer;text-align:left}
 .lang[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);font-weight:700}
@@ -190,7 +197,7 @@ a.btn{text-decoration:none}
 .msg{font-size:14px;padding:8px 0 0}
 .msg.err{color:var(--sun)}
 @media (prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
-</style>
+</style></head><body>
 
 <div class="app">
   <header class="top"><div class="r1"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAWfmNhQlgAABZ+anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFlhqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmZlNmQ1ZDE1LWM3NmMtNDQ4MS04NDhlLTY0NTRhOTNjYTI2OQAAAAOTanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuGp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNoB5QPheutt2bIEI/7jUnreQAAAGxjYm9yo2lkYzpmb3JtYXRpaW1hZ2UvcG5namluc3RhbmNlSUR4LHhtcDppaWQ6MDYzYTc2NGItNDBjNS00ZGY0LTk1YmUtYjBlZDY2NDk4NzE1bHJlbGF0aW9uc2hpcGhwYXJlbnRPZgAAAeJqdW1iAAAAQWp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuYWN0aW9ucy52MgAAAAAYYzJzaPt0Axg6lS/kp3f9gjmImTYAAAGZY2JvcqJnYWN0aW9uc4KiZmFjdGlvbmtjMnBhLm9wZW5lZGpwYXJhbWV0ZXJzoWtpbmdyZWRpZW50c4GiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIAyUBaMaSR/rPvZ9sHCUQsmJXjlyLGQmg7DiNwFGnEUtpGZhY3Rpb254HWNvbS5hbnRocm9waWMuY2xhdWRlLnByb3ZpZGVkanBhcmFtZXRlcnOheB9jb20uYW50aHJvcGljLm9yaWdpbi1jb25maWRlbmNlZ3Vua25vd25rZGVzY3JpcHRpb254ZkNsYXVkZSBwcm92aWRlZCB0aGlzIGZpbGUgYXQgdGhlIHJlcXVlc3Qgb2YgYSB1c2VyIGFuZCBtYXkgaGF2ZSBjcmVhdGVkIG9yIG1vZGlmaWVkIHRoZSBmaWxlIGNvbnRlbnRzLm1zb2Z0d2FyZUFnZW50oWRuYW1lZkNsYXVkZXJhbGxBY3Rpb25zSW5jbHVkZWT1AAAAyGp1bWIAAABAanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5oYXNoLmRhdGEAAAAAGGMyc2iA9dIDiZ3fo3I9qbbwg+/+AAAAgGNib3KlY2FsZ2ZzaGEyNTZjcGFkTQAAAAAAAAAAAAAAAABkaGFzaFggKc1LIKQBCbDPsMefp53QEtmQfmGE0JtjuiHe/rOrjuJkbmFtZW5qdW1iZiBtYW5pZmVzdGpleGNsdXNpb25zgaJlc3RhcnQYIWZsZW5ndGgZFooAAAI+anVtYgAAACdqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltLnYyAAAAAg9jYm9ypWNhbGdmc2hhMjU2aXNpZ25hdHVyZXhNc2VsZiNqdW1iZj0vYzJwYS91cm46YzJwYTpmZTZkNWQxNS1jNzZjLTQ0ODEtODQ4ZS02NDU0YTkzY2EyNjkvYzJwYS5zaWduYXR1cmVqaW5zdGFuY2VJRHgseG1wOmlpZDozY2FmMDgxMC1hZTU1LTQ4M2ItYWFiZC0xOWQzZjIzMjNkZmFyY3JlYXRlZF9hc3NlcnRpb25zg6JjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggDJQFoxpJH+s+9n2wcJRCyYleOXIsZCaDsOI3AUacRS2iY3VybHgqc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zLnYyZGhhc2hYIMowAT69dwDpeQeoq6amDktlTynUhwt4seZ/2csqx/t3omN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYIFjOlF2wASNxdMdU/Q/xOHjcCL5Qt2WcZVdXENI1h6XDdGNsYWltX2dlbmVyYXRvcl9pbmZvo2RuYW1lb0FudGhyb3BpYyBGaWxlc2d2ZXJzaW9uZTEuMC4wa3NwZWNWZXJzaW9uZTIuNC4wAAAQOGp1bWIAAAAoanVtZGMyY3MAEQAQgAAAqgA4m3EDYzJwYS5zaWduYXR1cmUAAAAQCGNib3LShFkCEqIBJhghWQIKMIICBjCCAY2gAwIBAgIUQOWgCu7COdC+uIP6BkIFPWdVEwAwCgYIKoZIzj0EAwMwSTEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxLjAsBgNVBAMTJUFudGhyb3BpYyBDb250ZW50IENyZWRlbnRpYWxzIFJvb3QgQ0EwHhcNMjYwODA3MTg0MzU2WhcNMjgwODA2MTk0MzU2WjBEMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEpMCcGA1UEAxMgQW50aHJvcGljIENsYXVkZSBDb250ZW50IFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASYegpry1AYBRTVNL1CpTlbROnY3dey+UrsF9C3phYrATN3ZHf93Mo8RQN0KOUuOn19P4oWNFWe5n2/She9N7eTo1gwVjAOBgNVHQ8BAf8EBAMCB4AwFQYDVR0lBA4wDAYKKwYBBAGD6F4CATAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFM5R4gSBTmRbI/jjxM+aPpzB11zCMAoGCCqGSM49BAMDA2cAMGQCMDFzHRSeAXrSy1WOzkbhPZ6Km2wGTmZ/2gK18k8BQGXyqz88Rdrz6CTX9flAnYNVxgIwcF9c3fVhqmJKpi+UhasNUMko69cyX6STPfta3Q8EjyzDjzoyrol46FP6VFHhvUcJoWNwYWRZDZ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WEB/hCbB9ghQyQ0yH+Mc0oUeHu7fBA7DE9YWn9+G8f4CVvg+zC1m79tiG8xepol+pHx1Plm7FJJuIgoOwSlWMs3AbwykEwAAB5ZJREFUeJzsWmuMW8UVnpk7Y99re6+96/U+7Oxmu0nbgIAoIYEKmkQC1JSqFQW1Ei2VitQWpNI/qEqF1FaqhFSE0h8V0Ae0aqO2CCFVStokXSmhlWiVgmCBmCRiE9hssht73+u3fZ8zzPV1bO+us9f2Jpgo/rSy53Fm7vnOOTNz5noxYwxcz0DgOkebQKvRJtBqtAm0Gjc2AWU8mhg5YCTnQVPgAxMjf+aTgHWgeQLZ0demX3iSmfqlZx7V4uOgQfAhsWceZYYx/fyTmdHjoFnAplOJC099NbLvDyTYnz7xT+XMmz2P/bKh4bN//Kl00x3y3Q/oSzPxZ7+/8dkjoCk07wFt4jTXnhdIZ4/ahAdi4yTQYw3v6lMvnAbN4rpfxLhOOTM5pxz9nT55hi7N1OiNf7S0bzdoBGY6V10tD0ddfWTjLeJXHhcCvfXMUxcB5X+v5v/1EjB0cO3BDaQuzWinX5f2/kDc87CjvHMImZfGCkdfXKE9X/qCVy5VBAyFej1ZBsQYXB6FPPKKvYTpemHkJWPyA8d5nAnkDv6amcbKx0OIMMl/8JYlcPJ1BBveyhBgueh/eYFPggjhE64Q4A/NH37OcR5ny9HFWM12X2fg0tPf9t56lz59wSe5QIOQRFfuxCHtfDR36v+BgY2A1ojPmuttBZw8UMiauVTNHoHq3ZEwnj4ruwFCDe9mfEiHG6L4WDASFmjt1cX4o6m59jxOHpB8cM1+4naDdcAlimv0WqGLBLAm2tloq3EDnMRC/zD4FKMeApvApxg3TDJXRkFnSYVmVJbRWE6jvFowgGowAbKkCgzKNBO4BZDTrNzAzg/4Icv3Yi+BGgVEABjBgAhMCt0YSgRIGHpdqMMF+bEQEJFE4FUjcOpcLDo29dZr2UtZNDavmwxOpxQ+fX+nJ6MYAs9kEGYC0RkyANGwl5+mPMOwdm5MIKWW1hCVGHBfY0INjZMCjEIiYjVNgEGgCXijqZm60SHh+EKGUw4HfQKgN/e6I6K60/vmbVsGbv1c5EpKXvFGtm//wb8dflsK9CzkGCA+SFyQSBC7kSBwhQgRvBLxipj/YYwyiplRWEY1LY2hBUtpVCwjWGxBlRarF9ntJXlbptjLKKWawtQs1Qo0kwgSNX3x3CNf3rb/xw805gEXgQVXSBE/gz18XrAh5L1lUB7o8Qz1eodCng4PLnm6lIRZUUIZmEvr8aQ2uageiSYTeQOWOCBW/Az7SV/A1d1Bgl4si4LbJfAo4uHncSGNQsVgCcsKdD7PpjN0Nmf5UOd5oulyXTlQrtizZ8dnDxw9oxBia/Cdezby79mUNno+MxJdTOZpTjPzqrUMeKbq9xDZQ3wi9nuJLOE+PxFFggxUtr1t411b/AUdLOTMibie03XN5AsGKiY3FmeC3ASJBPTLOOwXNoXQP8YKfBS3jzsd23P7fQ0TuHPrsESYyhNdK1GDvzoyxSyHW5lJlV15mc8AkxpK6ibMADZfsTrE5LKMNQP//PupPJ+hqsWKRkSgzrMeCvMa5ZxnFR0V9SYuy/O8DJjKlWmYgL9D6vZLiUIS+XtB0X6oYku+UouxXGopxnfxD62K8poydn9xUdjrxW5Z3Q4LsYmQz8WVaZgAx+Pf/MJTB07C0AYGYNmutgdYqWy3F1sqZWF1Cyvmz3yJFhkyy662lqCicalluYw5dfaxB+9YQ0mH90KD9/5M2Xyv4PWv3Ftq7ySoWsZIzJrJGd6Cu/rcoXDFrqhqW4JlvZfbviijJRbSR14eH/lF8wQuxBZ2ffcFc/tDlbivXgOrPGOXtbmLIHosLBlb/NZd9GyGxAvYtfN+MTyIyvYGrFQWkF1ezWT2L8//58UfDvR3raGhw0k8FOk+9KCw9+W/kju/IXR0Xo7Ty3pXl4tPpdkl+M7hu+TMj/aiHRF+zyT2PG/HtN+ePPTOadm96+tiV9AeV5lmud6ciZZYHD/w++OPdKytPajn1WL2laenUubXXs0pXcN06HYeD2U/VMeuOnUOnntjA878ZAe4b1Pta9rxcXX/uzDOZGnbF+XNW6rsXYn7/HQsO3oCTn148CEpLAu+b/0crJ+AXXjl/cJzozo/ZUjPoOIJ4o5Opub4CxUUP+sxc8M+/Ynt+J5h5xvmv8+rv3mPXixglfjcm29m1CQ+n7q0SNLzqYmJXi98Yht++DaPLXw1CdiIpc3RmDaZoqpBDQb7vHBTF97aR2SxscQ2pdDojP7RkjmbpQQBkcBBv7AjTLjVq8UcCTScjUZkISJLYN3wi2j3kHv3EFgn2nfiVqPhEBJCA9BX2dpYLmnyXZ+Dp/jhzZXXONQ0Z8aZWmhuyDUk4Lrpbp5nVeq6Vihqgzd8ngxvXSaKBGMi2tyQ+tEwgWWqrK5erSF1w3kNIDm4rL5i261UV2/HrPkh9qODYeAEZw+gQC9NL5ar+oejAFfHg2J/m/NT1r2sCubcZNNDbAidfcAJzgcZTc7lj/0JmJ/EzzPLIBDP3u8hf2htqTpCKNAj7rwffOLgD3XUHtT/OzFNL6jvHqOpBZZPgWsJ6PEjf7d7+5eQ3F2XfPt/5lqMNoFWo02g1WgTaDXaBFqNNoFW42MAAAD//6o/KjQAAAAGSURBVAMACZgSPoH/oNQAAAAASUVORK5CYII="><span class="brand">G-Travel</span><div class="flags" id="flags" role="group" aria-label="Idioma"></div></div><div class="r2"><h1 id="ttl"></h1><div class="hb" id="hbtns"></div></div></header>
@@ -266,25 +273,25 @@ zh:{tabCal:'日历',tabLoc:'城市',tabFot:'照片',postIg:'发布到 Instagram'
 };
 
 const I18N_X={
-pt:{myTrips:'Meus roteiros',newTrip:'Criar roteiro a partir do Excel',remove:'Remover',confirmDel:'Remover?',
+pt:{myTrips:'Meus roteiros',invite:'Convidar',inviteHow:'Quem receber o link abre o G-Travel já com este roteiro e pode instalar o app no celular.',withCosts:'Incluir os gastos no convite',shareLink:'Enviar convite (WhatsApp, e-mail…)',copyLink:'Copiar link',copied:'Link copiado.',selectCopy:'Selecione o link acima e copie.',shareBlocked:'Não foi possível abrir o compartilhamento aqui. Use "Copiar link".',inviteText:(n,t)=>`${n?n+' te convidou':'Você foi convidado'} para o roteiro "${t}" no G-Travel. Abra o link:`,invitedBy:n=>n?`${n} te convidou para um roteiro`:'Você recebeu um roteiro',addTrip:'Abrir roteiro no meu G-Travel',installTitle:'Instalar o app no celular',installNow:'Instalar G-Travel',installed:'O G-Travel já está instalado neste aparelho.',installFromSite:'Para instalar, abra no navegador do celular:',howAndroid:'<b>Android (Chrome):</b> toque em ⋮ no canto de cima e depois em <b>Instalar app</b> ou <b>Adicionar à tela inicial</b>.',howIOS:'<b>iPhone (Safari):</b> toque em <b>Compartilhar</b> (quadrado com seta) e depois em <b>Adicionar à Tela de Início</b>.',iosPaste:'No iPhone, depois de instalar, abra o app pelo ícone, vá em Ajustes → Abrir convite e cole este link.',joinTitle:'Abrir convite',joinHow:'Recebeu um link de convite? Cole aqui para adicionar o roteiro.',joinBtn:'Abrir convite',badInvite:'Esse link de convite não é válido ou está incompleto.',newTrip:'Criar roteiro a partir do Excel',remove:'Remover',confirmDel:'Remover?',
  step1:'Baixe a planilha modelo em branco.',step2:'Preencha as abas Dias, Programação, Deslocamentos e Gastos.',step3:'Envie a planilha preenchida aqui. O app monta o roteiro sozinho.',
  download:'Baixar planilha modelo',upload:'Enviar planilha preenchida',reading:'Lendo a planilha…',noDownload:'A planilha modelo pode ser baixada na versão instalada do app.',
  err:{noDays:()=>'Não encontrei a aba "Dias" preenchida na planilha.',noCols:n=>`A aba "${n}" precisa das colunas "Data" e "Cidade onde dorme".`,
   badDate:(n,l)=>`Data inválida na aba "${n}", linha ${l}. Use o formato 15/11/2026.`,dupDate:(n,l)=>`Data repetida na aba "${n}", linha ${l}. Cada dia aparece uma vez só.`,
   noDay:(n,l)=>`A data da aba "${n}", linha ${l}, não está na aba "Dias".`,noLib:()=>'Não consegui abrir o leitor de Excel. Verifique a internet e tente de novo.',badFile:()=>'Não consegui ler esse arquivo. Use a planilha modelo do G-Travel.'}},
-en:{myTrips:'My itineraries',newTrip:'Create an itinerary from Excel',remove:'Remove',confirmDel:'Remove?',
+en:{myTrips:'My itineraries',invite:'Invite',inviteHow:'Whoever gets the link opens G-Travel with this itinerary and can install the app on their phone.',withCosts:'Include costs in the invite',shareLink:'Send invite (WhatsApp, email…)',copyLink:'Copy link',copied:'Link copied.',selectCopy:'Select the link above and copy it.',shareBlocked:'Sharing cannot open here. Use "Copy link".',inviteText:(n,t)=>`${n?n+' invited you':'You are invited'} to the itinerary "${t}" on G-Travel. Open the link:`,invitedBy:n=>n?`${n} invited you to an itinerary`:'You received an itinerary',addTrip:'Open itinerary in my G-Travel',installTitle:'Install the app on your phone',installNow:'Install G-Travel',installed:'G-Travel is already installed on this device.',installFromSite:'To install, open this in your phone browser:',howAndroid:'<b>Android (Chrome):</b> tap ⋮ at the top, then <b>Install app</b> or <b>Add to Home screen</b>.',howIOS:'<b>iPhone (Safari):</b> tap <b>Share</b> (square with arrow), then <b>Add to Home Screen</b>.',iosPaste:'On iPhone, after installing, open the app from its icon, go to Settings → Open invite and paste this link.',joinTitle:'Open invite',joinHow:'Got an invite link? Paste it here to add the itinerary.',joinBtn:'Open invite',badInvite:'This invite link is not valid or is incomplete.',newTrip:'Create an itinerary from Excel',remove:'Remove',confirmDel:'Remove?',
  step1:'Download the blank template spreadsheet.',step2:'Fill in the Dias, Programação, Deslocamentos and Gastos tabs.',step3:'Upload the completed spreadsheet here. The app builds the itinerary for you.',
  download:'Download template',upload:'Upload completed spreadsheet',reading:'Reading the spreadsheet…',noDownload:'The template can be downloaded in the installed version of the app.',
  err:{noDays:()=>'The "Dias" tab is missing or empty.',noCols:n=>`The "${n}" tab needs the "Data" and "Cidade onde dorme" columns.`,
   badDate:(n,l)=>`Invalid date in tab "${n}", row ${l}. Use the format 15/11/2026.`,dupDate:(n,l)=>`Repeated date in tab "${n}", row ${l}. Each day appears only once.`,
   noDay:(n,l)=>`The date in tab "${n}", row ${l}, is not in the "Dias" tab.`,noLib:()=>'Could not load the Excel reader. Check your connection and try again.',badFile:()=>'Could not read this file. Use the G-Travel template.'}},
-es:{myTrips:'Mis itinerarios',newTrip:'Crear itinerario desde Excel',remove:'Eliminar',confirmDel:'¿Eliminar?',
+es:{myTrips:'Mis itinerarios',invite:'Invitar',inviteHow:'Quien reciba el enlace abre G-Travel con este itinerario y puede instalar la app en el celular.',withCosts:'Incluir los gastos en la invitación',shareLink:'Enviar invitación (WhatsApp, correo…)',copyLink:'Copiar enlace',copied:'Enlace copiado.',selectCopy:'Selecciona el enlace de arriba y cópialo.',shareBlocked:'Aquí no se puede abrir el menú de compartir. Usa "Copiar enlace".',inviteText:(n,t)=>`${n?n+' te invitó':'Te invitaron'} al itinerario "${t}" en G-Travel. Abre el enlace:`,invitedBy:n=>n?`${n} te invitó a un itinerario`:'Recibiste un itinerario',addTrip:'Abrir itinerario en mi G-Travel',installTitle:'Instalar la app en el celular',installNow:'Instalar G-Travel',installed:'G-Travel ya está instalada en este dispositivo.',installFromSite:'Para instalar, abre en el navegador del celular:',howAndroid:'<b>Android (Chrome):</b> toca ⋮ arriba y luego <b>Instalar app</b> o <b>Añadir a pantalla de inicio</b>.',howIOS:'<b>iPhone (Safari):</b> toca <b>Compartir</b> (cuadrado con flecha) y luego <b>Añadir a pantalla de inicio</b>.',iosPaste:'En iPhone, después de instalar, abre la app desde el ícono, ve a Ajustes → Abrir invitación y pega este enlace.',joinTitle:'Abrir invitación',joinHow:'¿Recibiste un enlace de invitación? Pégalo aquí para agregar el itinerario.',joinBtn:'Abrir invitación',badInvite:'Este enlace de invitación no es válido o está incompleto.',newTrip:'Crear itinerario desde Excel',remove:'Eliminar',confirmDel:'¿Eliminar?',
  step1:'Descarga la planilla modelo en blanco.',step2:'Completa las pestañas Dias, Programação, Deslocamentos y Gastos.',step3:'Sube aquí la planilla completa. La app arma el itinerario sola.',
  download:'Descargar planilla modelo',upload:'Subir planilla completa',reading:'Leyendo la planilla…',noDownload:'La planilla modelo se descarga en la versión instalada de la app.',
  err:{noDays:()=>'No encontré la pestaña "Dias" completa.',noCols:n=>`La pestaña "${n}" necesita las columnas "Data" y "Cidade onde dorme".`,
   badDate:(n,l)=>`Fecha inválida en la pestaña "${n}", fila ${l}. Usa el formato 15/11/2026.`,dupDate:(n,l)=>`Fecha repetida en la pestaña "${n}", fila ${l}. Cada día aparece una sola vez.`,
   noDay:(n,l)=>`La fecha de la pestaña "${n}", fila ${l}, no está en la pestaña "Dias".`,noLib:()=>'No pude abrir el lector de Excel. Revisa la conexión e inténtalo de nuevo.',badFile:()=>'No pude leer este archivo. Usa la planilla modelo de G-Travel.'}},
-zh:{myTrips:'我的行程',newTrip:'用 Excel 创建行程',remove:'删除',confirmDel:'确定删除？',
+zh:{myTrips:'我的行程',invite:'邀请',inviteHow:'收到链接的人打开 G-Travel 就能看到这个行程，还可以把应用安装到手机上。',withCosts:'邀请中包含花费',shareLink:'发送邀请（微信、WhatsApp、邮件…）',copyLink:'复制链接',copied:'链接已复制。',selectCopy:'请选中上面的链接并复制。',shareBlocked:'这里无法打开分享，请使用“复制链接”。',inviteText:(n,t)=>`${n?n+' 邀请你':'你受邀'}查看 G-Travel 行程“${t}”。打开链接：`,invitedBy:n=>n?`${n} 邀请你查看一个行程`:'你收到了一个行程',addTrip:'在我的 G-Travel 中打开行程',installTitle:'把应用安装到手机',installNow:'安装 G-Travel',installed:'此设备已安装 G-Travel。',installFromSite:'要安装，请在手机浏览器中打开：',howAndroid:'<b>安卓（Chrome）：</b>点右上角 ⋮，再点<b>安装应用</b>或<b>添加到主屏幕</b>。',howIOS:'<b>iPhone（Safari）：</b>点<b>分享</b>（带箭头的方框），再点<b>添加到主屏幕</b>。',iosPaste:'在 iPhone 上安装后，从图标打开应用，进入 设置 → 打开邀请，粘贴此链接。',joinTitle:'打开邀请',joinHow:'收到邀请链接了吗？粘贴到这里即可添加行程。',joinBtn:'打开邀请',badInvite:'此邀请链接无效或不完整。',newTrip:'用 Excel 创建行程',remove:'删除',confirmDel:'确定删除？',
  step1:'下载空白模板表格。',step2:'填写 Dias、Programação、Deslocamentos 和 Gastos 工作表。',step3:'在此上传填好的表格，应用会自动生成行程。',
  download:'下载模板表格',upload:'上传填好的表格',reading:'正在读取表格…',noDownload:'模板表格可在已安装的应用版本中下载。',
  err:{noDays:()=>'找不到已填写的 "Dias" 工作表。',noCols:n=>`"${n}" 工作表需要 "Data" 和 "Cidade onde dorme" 两列。`,
@@ -349,34 +356,51 @@ function readSheet(wb,key){
 }
 const col=(sh,...keys)=>{if(!sh)return -1;for(const k of keys){const i=sh.head.findIndex(h=>h.startsWith(k));if(i>=0)return i}return -1};
 const PALETTE=['#ec6f35','#1565c0','#d9561f','#0288d1','#f5a274','#3949ab','#e2652a','#0097a7','#f08048','#0d47a1','#f0b8a1','#1e88e5'];
+/* nomes de cidades e países conhecidos, para traduzir roteiros vindos da planilha */
+const CITY_DB={barcelona:['BCN','Barcelona','Barcelona','巴塞罗那'],madri:['MAD','Madrid','Madrid','马德里'],madrid:['MAD','Madrid','Madrid','马德里'],xangai:['XNG','Shanghai','Shanghái','上海'],shanghai:['XNG','Shanghai','Shanghái','上海'],
+ pequim:['PEQ','Beijing','Pekín','北京'],beijing:['PEQ','Beijing','Pekín','北京'],zhangjiajie:['ZJJ','Zhangjiajie','Zhangjiajie','张家界'],furong:['FUR','Furong','Furong','芙蓉镇'],wulingyuan:['WLY','Wulingyuan','Wulingyuan','武陵源'],
+ chengdu:['CTU','Chengdu','Chengdu','成都'],fenghuang:['FHG','Fenghuang','Fenghuang','凤凰'],suzhou:['SZH','Suzhou','Suzhou','苏州'],hangzhou:['HGH','Hangzhou','Hangzhou','杭州'],xian:["XIY","Xi'an","Xi'an",'西安'],guilin:['KWL','Guilin','Guilin','桂林'],
+ 'hong kong':['HKG','Hong Kong','Hong Kong','香港'],macau:['MFM','Macau','Macao','澳门'],recife:['REC','Recife','Recife','累西腓'],'sao paulo':['SAO','São Paulo','São Paulo','圣保罗'],'rio de janeiro':['RIO','Rio de Janeiro','Río de Janeiro','里约热内卢'],
+ salvador:['SSA','Salvador','Salvador','萨尔瓦多'],brasilia:['BSB','Brasília','Brasilia','巴西利亚'],lisboa:['LIS','Lisbon','Lisboa','里斯本'],porto:['POR','Porto','Oporto','波尔图'],paris:['PAR','Paris','París','巴黎'],londres:['LON','London','Londres','伦敦'],
+ roma:['ROM','Rome','Roma','罗马'],milao:['MIL','Milan','Milán','米兰'],veneza:['VCE','Venice','Venecia','威尼斯'],florenca:['FLR','Florence','Florencia','佛罗伦萨'],amsterda:['AMS','Amsterdam','Ámsterdam','阿姆斯特丹'],berlim:['BER','Berlin','Berlín','柏林'],
+ 'nova york':['NYC','New York','Nueva York','纽约'],'nova iorque':['NYC','New York','Nueva York','纽约'],orlando:['ORL','Orlando','Orlando','奥兰多'],miami:['MIA','Miami','Miami','迈阿密'],toquio:['TYO','Tokyo','Tokio','东京'],quioto:['KYO','Kyoto','Kioto','京都'],
+ seul:['SEL','Seoul','Seúl','首尔'],sevilha:['SVQ','Seville','Sevilla','塞维利亚'],granada:['GRX','Granada','Granada','格拉纳达'],'buenos aires':['BUE','Buenos Aires','Buenos Aires','布宜诺斯艾利斯'],santiago:['SCL','Santiago','Santiago','圣地亚哥'],
+ 'cidade do mexico':['MEX','Mexico City','Ciudad de México','墨西哥城'],cancun:['CUN','Cancún','Cancún','坎昆'],dubai:['DXB','Dubai','Dubái','迪拜'],cairo:['CAI','Cairo','El Cairo','开罗']};
+const COUNTRY_DB={espanha:['Spain','España','西班牙'],china:['China','China','中国'],brasil:['Brazil','Brasil','巴西'],portugal:['Portugal','Portugal','葡萄牙'],franca:['France','Francia','法国'],italia:['Italy','Italia','意大利'],
+ inglaterra:['England','Inglaterra','英国'],'reino unido':['United Kingdom','Reino Unido','英国'],alemanha:['Germany','Alemania','德国'],holanda:['Netherlands','Países Bajos','荷兰'],'estados unidos':['United States','Estados Unidos','美国'],eua:['United States','Estados Unidos','美国'],
+ japao:['Japan','Japón','日本'],'coreia do sul':['South Korea','Corea del Sur','韩国'],argentina:['Argentina','Argentina','阿根廷'],chile:['Chile','Chile','智利'],mexico:['Mexico','México','墨西哥'],egito:['Egypt','Egipto','埃及'],'emirados arabes':['UAE','Emiratos Árabes','阿联酋']};
+const i18nName=(db,n,src,i0)=>{const e=db[norm(n)];if(!e)return String(n).trim();const o={pt:String(n).trim(),en:e[i0],es:e[i0+1],zh:e[i0+2]};o[src]=String(n).trim();return o};
 function workbookToTrip(wb,srcLang){
   const dias=readSheet(wb,'dia');if(!dias||!dias.rows.length)throw new SheetError('noDays');
   const cD=col(dias,'data'),cC=col(dias,'cidade'),cP=col(dias,'pais'),cT=col(dias,'titulo'),cH=col(dias,'hotel'),cV=col(dias,'valor');
+  const LX=['en','es','zh'],tCols=sh=>Object.fromEntries(LX.map(k=>[k,sh.head.findIndex(h=>h.endsWith('('+k+')'))]).filter(([,i])=>i>=0));const dT=tCols(dias);
   if(cD<0||cC<0)throw new SheetError('noCols',dias.name);
   const cities={},byName={},days=[],seen={};
   const cityKey=name=>{
     const n=norm(name);
     if(!n||/^(voo|em voo|aviao|flight|vuelo)$/.test(n)){if(!cities.VOO)cities.VOO={code:'VOO',name:{pt:'Em voo',en:'In flight',es:'En vuelo',zh:'飞行中'},country:null,color:'#78909c'};return 'VOO'}
     if(byName[n])return byName[n];
-    let code=n.replace(/[^a-z]/g,'').slice(0,3).toUpperCase()||'CID',k=code,i=2;while(cities[k])k=code.slice(0,2)+i++;
-    cities[k]={code:k,name:String(name).trim(),country:null,color:PALETTE[Object.keys(cities).filter(x=>x!=='VOO').length%PALETTE.length]};
+    let code=CITY_DB[n]?.[0]||n.replace(/[^a-z]/g,'').slice(0,3).toUpperCase()||'CID',k=code,i=2;while(cities[k])k=code.slice(0,2)+i++;
+    cities[k]={code:k,name:i18nName(CITY_DB,name,srcLang,1),country:null,color:PALETTE[Object.keys(cities).filter(x=>x!=='VOO').length%PALETTE.length]};
     byName[n]=k;return k;
   };
   for(const {r,line} of dias.rows){
     const date=xDate(r[cD]);if(!date||date==='bad')throw new SheetError('badDate',dias.name,line);
     if(seen[date])throw new SheetError('dupDate',dias.name,line);seen[date]=1;
-    const k=cityKey(r[cC]);if(cP>=0&&r[cP]&&k!=='VOO')cities[k].country=String(r[cP]).trim();
+    const k=cityKey(r[cC]);if(cP>=0&&r[cP]&&k!=='VOO')cities[k].country=i18nName(COUNTRY_DB,r[cP],srcLang,0);
     if(k!=='VOO'&&!cities[k].country)cities[k].country='';
-    days.push({date,city:k,title:{[srcLang]:cT>=0&&r[cT]?String(r[cT]).trim():(k==='VOO'?'✈':cities[k].name)},legs:[],text:{[srcLang]:''},
+    days.push({date,city:k,title:{[srcLang]:cT>=0&&r[cT]?String(r[cT]).trim():(k==='VOO'?'✈':(typeof cities[k].name==='string'?cities[k].name:cities[k].name[srcLang]))},legs:[],text:{[srcLang]:''},
       hotel:cH>=0&&r[cH]?String(r[cH]).trim():null,hotelCost:cV>=0?xNum(r[cV]):0,tickets:0,expenses:[]});
+    for(const[k,i]of Object.entries(dT))if(r[i])days[days.length-1].title[k]=String(r[i]).trim();
   }
   days.sort((a,b)=>a.date<b.date?-1:1);
   const idx=Object.fromEntries(days.map((d,i)=>[d.date,i]));
   const dayOf=(sh,line,v)=>{const d=xDate(v);if(!d||d==='bad')throw new SheetError('badDate',sh.name,line);if(idx[d]===undefined)throw new SheetError('noDay',sh.name,line);return days[idx[d]]};
   const pr=readSheet(wb,'program');
-  if(pr){const a=col(pr,'data'),h=col(pr,'hora'),t=col(pr,'ativ','descr');
-    for(const {r,line} of pr.rows){if(t<0||!r[t])continue;const d=dayOf(pr,line,r[a]),tm=h>=0?xTime(r[h]):null;
-      d.text[srcLang]+=(d.text[srcLang]?'\n':'')+(tm?tm+' ':'')+String(r[t]).trim()}}
+  if(pr){const a=col(pr,'data'),h=col(pr,'hora'),t=col(pr,'ativ','descr'),pT=tCols(pr);
+    for(const {r,line} of pr.rows){if(t<0||!r[t])continue;const d=dayOf(pr,line,r[a]),tm=h>=0?xTime(r[h]):null,pre=tm?tm+' ':'';
+      d.text[srcLang]+=(d.text[srcLang]?'\n':'')+pre+String(r[t]).trim();
+      for(const[k,i]of Object.entries(pT)){if(k===srcLang)continue;const v=r[i]?String(r[i]).trim():String(r[t]).trim();d.text[k]=(d.text[k]?d.text[k]+'\n':'')+pre+v}}}
   const ds=readSheet(wb,'desloc');
   if(ds){const a=col(ds,'data'),f=col(ds,'saida de','de','origem'),hs=col(ds,'horario de saida','saida'),to=col(ds,'chegada em','para','destino'),hc=col(ds,'horario de chegada','chegada'),m=col(ds,'transp'),v=col(ds,'valor'),o=col(ds,'obs');
     for(const {r,line} of ds.rows){const d=dayOf(ds,line,r[a]),mode=norm(m>=0?r[m]:'');
@@ -440,7 +464,8 @@ function render(){
   const H=$('#hbtns');H.innerHTML='';
   if(st.tab==='cal'){
     $('#ttl').textContent=T().tabCal;
-    H.innerHTML=`<button class="pill" id="bv">${st.view==='month'?T().list:T().month}</button><button class="pill" id="bh">${T().today}</button>`;
+    H.innerHTML=`<button class="pill" id="bv">${st.view==='month'?T().list:T().month}</button><button class="pill" id="bh">${T().today}</button><button class="pill icon" id="binv" aria-label="${T().invite}" title="${T().invite}">✉️</button>`;
+    $('#binv').onclick=()=>inviteSheet(TRIP);
     $('#bv').onclick=()=>{st.view=st.view==='month'?'list':'month';save();render()};
     $('#bh').onclick=goToday;
     st.view==='month'?renderMonth():renderList();
@@ -621,6 +646,87 @@ function shareSheet(photos){
     }catch(e){m.className='msg err';m.textContent=T().shareFail}};
   $('#o-story').onclick=()=>go(true);$('#o-feed').onclick=()=>go(false);
 }
+/* ---------- convites: o roteiro vai dentro do link ---------- */
+const SITE_URL='https://zneves-app.github.io/g-travel/';
+const isHosted=()=>/^https?:$/.test(location.protocol)&&!/claude\.ai|claudeusercontent/.test(location.hostname);
+const appUrl=()=>isHosted()?location.origin+location.pathname:SITE_URL;
+const b64u=u8=>{let s='';for(let i=0;i<u8.length;i+=0x8000)s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64u=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+async function packTrip(t,withCosts){
+  const c=JSON.parse(JSON.stringify(t));delete c.id;
+  if(!withCosts)c.days.forEach(d=>{d.hotelCost=0;d.tickets=0;d.expenses=[]});
+  c.noCosts=!withCosts;
+  const raw=new TextEncoder().encode(JSON.stringify(c));
+  if(window.CompressionStream){const z=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());return 'z'+b64u(z)}
+  return 'j'+b64u(raw);
+}
+async function unpackTrip(s){
+  const kind=s[0],u=unb64u(s.slice(1));let txt;
+  if(kind==='z'){if(!window.DecompressionStream)throw new Error('old');txt=await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text()}
+  else txt=new TextDecoder().decode(u);
+  const t=JSON.parse(txt);if(!validTrip(t))throw new Error('bad');return t;
+}
+const tripKey=async s=>{const h=new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)));return 'inv'+b64u(h).slice(0,12)};
+function inviteSheet(t){
+  const S=$('#sheet');let link='',busy=true;
+  S.innerHTML=`<div class="modal" role="dialog"><div class="mbox card">
+    <h3 class="mt">✉️ ${T().invite}</h3><div class="muted">${esc(tx(t.trip))}</div>
+    <p class="small muted" style="margin:0">${T().inviteHow}</p>
+    <label class="chk"><input type="checkbox" id="ic"> ${T().withCosts}</label>
+    <button class="btn" id="ish" disabled>${T().shareLink}</button>
+    <button class="btn ghost" id="icp" disabled>${T().copyLink}</button>
+    <textarea id="ilink" class="linkbox" readonly rows="2" aria-label="link"></textarea>
+    <div class="msg" id="imsg" role="status"></div>
+    <button class="btn ghost" id="ix">${T().closeLbl}</button></div></div>`;
+  S.hidden=false;const close=()=>{S.hidden=true;S.innerHTML=''};$('#ix').onclick=close;
+  const make=async()=>{busy=true;$('#ish').disabled=$('#icp').disabled=true;
+    link=appUrl()+'#convite='+await packTrip(t,$('#ic').checked);$('#ilink').value=link;busy=false;$('#ish').disabled=$('#icp').disabled=false};
+  $('#ic').onchange=make;make();
+  const text=T().inviteText(t.traveler||'',tx(t.trip));
+  $('#ish').onclick=()=>{if(busy)return;const m=$('#imsg');
+    if(navigator.share){navigator.share({title:'G-Travel',text,url:link}).then(close).catch(e=>{if(e.name!=='AbortError'){m.className='msg err';m.textContent=T().shareBlocked}})}
+    else{m.className='msg err';m.textContent=T().shareBlocked}};
+  $('#icp').onclick=()=>{if(busy)return;const m=$('#imsg');m.className='msg';
+    const ok=()=>m.textContent=T().copied;
+    if(navigator.clipboard?.writeText)navigator.clipboard.writeText(text+'\n'+link).then(ok).catch(()=>{$('#ilink').select();m.textContent=T().selectCopy});
+    else{$('#ilink').select();m.textContent=T().selectCopy}};
+}
+/* instalação */
+let installEvt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;document.querySelectorAll('.inst-btn').forEach(b=>b.hidden=false)});
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function installBlock(){
+  if(isStandalone())return `<div class="muted small">✓ ${T().installed}</div>`;
+  if(!isHosted())return `<div class="muted small">${T().installFromSite} <b>${esc(SITE_URL)}</b></div>`;
+  return `<button class="btn inst-btn" ${installEvt?'':'hidden'}>📲 ${T().installNow}</button>
+   <div class="howto">${isIOS()?T().howIOS:T().howAndroid}</div>`;
+}
+function wireInstall(root){root.querySelectorAll('.inst-btn').forEach(b=>b.onclick=async()=>{if(!installEvt)return;installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;b.hidden=true})}
+async function addInvited(t,key){
+  t.id=key;const i=SAVED.findIndex(x=>x.id===key);if(i>=0)SAVED[i]=t;else SAVED.push(t);saveTrips();setTrip(t);resetMonth();
+}
+async function openInvite(code){
+  let t,key;try{t=await unpackTrip(code);key=await tripKey(code)}catch(e){
+    const S=$('#sheet');S.innerHTML=`<div class="modal"><div class="mbox card"><h3 class="mt">${T().badInvite}</h3><button class="btn" id="bx">OK</button></div></div>`;S.hidden=false;$('#bx').onclick=()=>{S.hidden=true;S.innerHTML=''};return}
+  const f=t.days[0].date,l=t.days[t.days.length-1].date,S=$('#sheet');
+  const link=appUrl()+'#convite='+code;
+  S.innerHTML=`<div class="modal" role="dialog"><div class="mbox card welcome">
+    <img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAWfmNhQlgAABZ+anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFlhqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmZlNmQ1ZDE1LWM3NmMtNDQ4MS04NDhlLTY0NTRhOTNjYTI2OQAAAAOTanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuGp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNoB5QPheutt2bIEI/7jUnreQAAAGxjYm9yo2lkYzpmb3JtYXRpaW1hZ2UvcG5namluc3RhbmNlSUR4LHhtcDppaWQ6MDYzYTc2NGItNDBjNS00ZGY0LTk1YmUtYjBlZDY2NDk4NzE1bHJlbGF0aW9uc2hpcGhwYXJlbnRPZgAAAeJqdW1iAAAAQWp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuYWN0aW9ucy52MgAAAAAYYzJzaPt0Axg6lS/kp3f9gjmImTYAAAGZY2JvcqJnYWN0aW9uc4KiZmFjdGlvbmtjMnBhLm9wZW5lZGpwYXJhbWV0ZXJzoWtpbmdyZWRpZW50c4GiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIAyUBaMaSR/rPvZ9sHCUQsmJXjlyLGQmg7DiNwFGnEUtpGZhY3Rpb254HWNvbS5hbnRocm9waWMuY2xhdWRlLnByb3ZpZGVkanBhcmFtZXRlcnOheB9jb20uYW50aHJvcGljLm9yaWdpbi1jb25maWRlbmNlZ3Vua25vd25rZGVzY3JpcHRpb254ZkNsYXVkZSBwcm92aWRlZCB0aGlzIGZpbGUgYXQgdGhlIHJlcXVlc3Qgb2YgYSB1c2VyIGFuZCBtYXkgaGF2ZSBjcmVhdGVkIG9yIG1vZGlmaWVkIHRoZSBmaWxlIGNvbnRlbnRzLm1zb2Z0d2FyZUFnZW50oWRuYW1lZkNsYXVkZXJhbGxBY3Rpb25zSW5jbHVkZWT1AAAAyGp1bWIAAABAanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5oYXNoLmRhdGEAAAAAGGMyc2iA9dIDiZ3fo3I9qbbwg+/+AAAAgGNib3KlY2FsZ2ZzaGEyNTZjcGFkTQAAAAAAAAAAAAAAAABkaGFzaFggKc1LIKQBCbDPsMefp53QEtmQfmGE0JtjuiHe/rOrjuJkbmFtZW5qdW1iZiBtYW5pZmVzdGpleGNsdXNpb25zgaJlc3RhcnQYIWZsZW5ndGgZFooAAAI+anVtYgAAACdqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltLnYyAAAAAg9jYm9ypWNhbGdmc2hhMjU2aXNpZ25hdHVyZXhNc2VsZiNqdW1iZj0vYzJwYS91cm46YzJwYTpmZTZkNWQxNS1jNzZjLTQ0ODEtODQ4ZS02NDU0YTkzY2EyNjkvYzJwYS5zaWduYXR1cmVqaW5zdGFuY2VJRHgseG1wOmlpZDozY2FmMDgxMC1hZTU1LTQ4M2ItYWFiZC0xOWQzZjIzMjNkZmFyY3JlYXRlZF9hc3NlcnRpb25zg6JjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggDJQFoxpJH+s+9n2wcJRCyYleOXIsZCaDsOI3AUacRS2iY3VybHgqc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zLnYyZGhhc2hYIMowAT69dwDpeQeoq6amDktlTynUhwt4seZ/2csqx/t3omN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYIFjOlF2wASNxdMdU/Q/xOHjcCL5Qt2WcZVdXENI1h6XDdGNsYWltX2dlbmVyYXRvcl9pbmZvo2RuYW1lb0FudGhyb3BpYyBGaWxlc2d2ZXJzaW9uZTEuMC4wa3NwZWNWZXJzaW9uZTIuNC4wAAAQOGp1bWIAAAAoanVtZGMyY3MAEQAQgAAAqgA4m3EDYzJwYS5zaWduYXR1cmUAAAAQCGNib3LShFkCEqIBJhghWQIKMIICBjCCAY2gAwIBAgIUQOWgCu7COdC+uIP6BkIFPWdVEwAwCgYIKoZIzj0EAwMwSTEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxLjAsBgNVBAMTJUFudGhyb3BpYyBDb250ZW50IENyZWRlbnRpYWxzIFJvb3QgQ0EwHhcNMjYwODA3MTg0MzU2WhcNMjgwODA2MTk0MzU2WjBEMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEpMCcGA1UEAxMgQW50aHJvcGljIENsYXVkZSBDb250ZW50IFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASYegpry1AYBRTVNL1CpTlbROnY3dey+UrsF9C3phYrATN3ZHf93Mo8RQN0KOUuOn19P4oWNFWe5n2/She9N7eTo1gwVjAOBgNVHQ8BAf8EBAMCB4AwFQYDVR0lBA4wDAYKKwYBBAGD6F4CATAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFM5R4gSBTmRbI/jjxM+aPpzB11zCMAoGCCqGSM49BAMDA2cAMGQCMDFzHRSeAXrSy1WOzkbhPZ6Km2wGTmZ/2gK18k8BQGXyqz88Rdrz6CTX9flAnYNVxgIwcF9c3fVhqmJKpi+UhasNUMko69cyX6STPfta3Q8EjyzDjzoyrol46FP6VFHhvUcJoWNwYWRZDZ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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" class="wicon">
+    <h3 class="mt">${esc(T().invitedBy(t.traveler||''))}</h3>
+    <div><b>${esc(tx(t.trip))}</b><div class="muted">${shortDate(f)} ${T().to} ${shortDate(l)} · ${T().days(t.days.length)}</div></div>
+    <button class="btn" id="wadd">${T().addTrip}</button>
+    <div class="sec" style="padding:8px 0 0">${T().installTitle}</div>
+    ${installBlock()}
+    ${isIOS()&&!isStandalone()?`<div class="muted small">${T().iosPaste}</div><button class="btn ghost" id="wcp">${T().copyLink}</button>`:''}
+    <div class="msg" id="wmsg" role="status"></div></div></div>`;
+  S.hidden=false;wireInstall(S);
+  const done=async()=>{await addInvited(t,key);S.hidden=true;S.innerHTML='';st.tab='cal';st.view='month';save();render()};
+  $('#wadd').onclick=done;
+  const cp=$('#wcp');if(cp)cp.onclick=()=>{navigator.clipboard?.writeText(link).then(()=>{$('#wmsg').textContent=T().copied}).catch(()=>{})};
+  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
+}
+async function pasteInvite(v){const m=String(v).match(/#?convite=([A-Za-z0-9_-]+)/);if(!m)throw new Error('bad');const t=await unpackTrip(m[1]);await addInvited(t,await tripKey(m[1]))}
 function renderGas(){
   const c={tickets:0,lodging:0,food:0,tours:0,local:0,other:0};
   DAYS.forEach(d=>{c.tickets+=d.tickets||0;c.lodging+=d.hotelCost||0;(d.expenses||[]).forEach(e=>c[catOf(e[0])]+=e[1])});
@@ -638,10 +744,16 @@ function renderCfg(){
   const tripRow=t=>{const f=t.days[0].date,l=t.days[t.days.length-1].date,on=t===TRIP;
     return `<div class="trip ${on?'on':''}"><button class="pick" data-id="${esc(t.id)}" aria-pressed="${on}"><span class="radio"></span><span class="mid"><span class="t">${esc(tx(t.trip))}</span>
     <span class="s">${t.traveler?esc(t.traveler)+' · ':''}${shortDate(f)} ${T().to} ${shortDate(l)} · ${T().days(t.days.length)}</span></span></button>
+    <button class="inv" data-inv="${esc(t.id)}" aria-label="${T().invite}">✉️</button>
     ${t.id!=='original'?`<button class="del" data-del="${esc(t.id)}" aria-label="${T().remove}">✕</button>`:''}</div>`};
   $('#main').innerHTML=`<div class="wrap">
    <div class="sec">${T().myTrips}</div>
    <div class="card list">${allTrips().map(tripRow).join('')}</div>
+   <div class="sec">${T().joinTitle}</div>
+   <div class="card box stack"><div class="muted small">${T().joinHow}</div>
+     <input id="pinv" class="linkbox" placeholder="https://…#convite=…" autocomplete="off"><button class="btn ghost" id="bpinv">${T().joinBtn}</button><div class="msg" id="jmsg" role="status"></div></div>
+   <div class="sec">${T().installTitle}</div>
+   <div class="card box stack" id="instbox">${installBlock()}</div>
    <div class="sec">${T().newTrip}</div>
    <div class="card box stack">
      <ol class="steps"><li>${T().step1}</li><li>${T().step2}</li><li>${T().step3}</li></ol>
@@ -652,6 +764,9 @@ function renderCfg(){
   const dl=$('#dl');if(dl&&window.claude?.use)window.claude.use('downloads').then(d=>{if(!d||!document.body.contains(dl))return;dl.hidden=false;$('#nodl').hidden=true;
     dl.onclick=()=>{const bin=atob(TPL_B64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
       d.save({filename:'modelo-g-travel.xlsx',data:new Blob([u])}).catch(()=>{})}}).catch(()=>{});
+  wireInstall($('#main'));
+  document.querySelectorAll('.inv').forEach(b=>b.onclick=()=>{const t=allTrips().find(x=>x.id===b.dataset.inv);if(t)inviteSheet(t)});
+  $('#bpinv').onclick=async()=>{const m=$('#jmsg');try{await pasteInvite($('#pinv').value);st.tab='cal';st.view='month';save();render()}catch(e){m.className='msg err';m.textContent=T().badInvite}};
   document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{const t=allTrips().find(x=>x.id===b.dataset.id);if(t){setTrip(t);resetMonth();renderCfg()}});
   document.querySelectorAll('.del').forEach(b=>b.onclick=()=>{
     if(b.dataset.armed){SAVED=SAVED.filter(t=>t.id!==b.dataset.del);saveTrips();if(TRIP.id===b.dataset.del){setTrip(ORIGINAL);resetMonth()}renderCfg();return}
@@ -665,7 +780,7 @@ function timeline(text){
   return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
     let m=l.match(/^(\d{1,2}[:h]\d{2}(?:\s*[–-]\s*\d{1,2}[:h]\d{2})?)(?:\s*em diante)?\s*[-–:\t ]\s*(.+)$/);
     if(m)return `<div class="e"><span class="tm">${m[1].replace(/h/g,':').replace(/\s/g,'')}</span><span>${esc(m[2].replace(/^[-–]\s*/,''))}</span></div>`;
-    m=l.match(/^(Manh[ãa]|Tarde|Noite|Jantar|Almoço|Dia|Depois do jantar)[^:]{0,22}:\s*(.+)$/i);
+    m=l.match(/^(Manh[ãa]|Tarde|Noite|Jantar|Almoço|Dia|Depois do jantar|Morning|Afternoon|Evening|Night|Dinner|Lunch|Mañana|Noche|Cena|Almuerzo|上午|下午|晚上|晚餐|午餐)[^:：]{0,22}[:：]\s*(.+)$/i);
     if(m)return `<div class="e"><span class="tm">${esc(m[1])}</span><span>${esc(m[2])}</span></div>`;
     return `<div class="e np"><span>${esc(l)}</span></div>`;
   }).join('');
@@ -697,6 +812,8 @@ let tx0=null;document.addEventListener('touchstart',e=>{if(cur!==null)tx0=e.touc
 document.addEventListener('touchend',e=>{if(cur===null||tx0===null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>70){if(dx<0&&cur<DAYS.length-1)openDay(cur+1);if(dx>0&&cur>0)openDay(cur-1)}},{passive:true});
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{album=null;selMode=false;selected.clear();st.tab=b.dataset.tab;save();closeDay();render()});
 render();
+if(/^#convite=/.test(location.hash))openInvite(location.hash.slice(9));
+window.addEventListener('hashchange',()=>{if(/^#convite=/.test(location.hash))openInvite(location.hash.slice(9))});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
 fetch('roteiro.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(t=>{if(validTrip(t)&&TRIP===ORIGINAL&&JSON.stringify(t)!==JSON.stringify(ORIGINAL)){ORIGINAL_SET(t)}}).catch(()=>{});
 function ORIGINAL_SET(t){setTrip(t);resetMonth();render()}
