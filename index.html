@@ -1,0 +1,704 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*{box-sizing:border-box}body{margin:0}[hidden]{display:none!important}</style></head><body><title>G-Travel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#1a4f8b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="G-Travel">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@500&display=swap">
+<style>
+/* Layout: app de uma tela; cabeçalho azul, conteúdo rolável, barra inferior com 4 abas. Azul = estrutura, laranja = destaque */
+:root{
+  --brand:#1a4f8b; --brand-ink:#ffffff; --accent:#ec6f35; --accent-ink:#ffffff;
+  --soft:#fde0cf; --brand-text:#1a4f8b; --accent-text:#b84f1c;
+  --bg:#eef2f7; --card:#ffffff; --fg:#18212d; --muted:#5f6b7a; --line:#e2e7ef;
+  --sun:#d84315; --shadow:0 1px 3px rgba(16,36,64,.08);
+  --f-body:"Roboto",system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --f-num:"Roboto Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --brand:#16365c; --brand-ink:#eaf2ff; --accent:#f58d5c; --accent-ink:#1b1206;
+  --soft:#4a2c22; --brand-text:#8fbcf0; --accent-text:#f0a68a;
+  --bg:#0f141b; --card:#19212c; --fg:#e6ebf2; --muted:#9aa6b6; --line:#28323f;
+  --sun:#ff8a65; --shadow:none; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --brand:#16365c; --brand-ink:#eaf2ff; --accent:#f58d5c; --accent-ink:#1b1206;
+  --soft:#4a2c22; --brand-text:#8fbcf0; --accent-text:#f0a68a;
+  --bg:#0f141b; --card:#19212c; --fg:#e6ebf2; --muted:#9aa6b6; --line:#28323f;
+  --sun:#ff8a65; --shadow:none; color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--brand)}
+.app{display:flex;flex-direction:column;height:100%;max-width:560px;margin:0 auto;background:var(--bg)}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--brand);color:var(--brand-ink);
+  display:flex;flex-direction:column;gap:8px;padding-block:10px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header.top .r1,header.top .r2{display:flex;align-items:center;gap:10px;min-height:36px}
+header.top img{width:30px;height:30px;border-radius:8px;flex:none}
+header.top .brand{font-size:18px;font-weight:700;flex:1;min-width:0;letter-spacing:.01em}
+.flags{display:flex;gap:4px;flex:none}
+.flag{border:2px solid transparent;background:transparent;border-radius:8px;width:38px;height:32px;font-size:22px;line-height:1;cursor:pointer;display:grid;place-items:center;padding:0;opacity:.6}
+.flag[aria-pressed="true"]{border-color:var(--accent);background:rgba(255,255,255,.14);opacity:1}
+header.top h1{font-size:20px;font-weight:500;margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hb{display:flex;gap:6px;flex:none}
+.pill{border:1.5px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:5px 12px;font:500 14px var(--f-body);cursor:pointer;white-space:nowrap}
+main{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:96px}
+.wrap{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.cal{background:var(--card);border-radius:0 0 22px 22px;padding:8px 6px 14px;box-shadow:var(--shadow)}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;padding:8px 6px 10px}
+.cal-nav h2{font-size:22px;font-weight:500;margin:0}
+.navbtn{width:40px;height:40px;border:0;background:transparent;color:var(--fg);font-size:26px;border-radius:50%;cursor:pointer}
+.navbtn:disabled{opacity:.25}
+.grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));row-gap:6px}
+.dow{text-align:center;color:var(--muted);font-size:13px;padding-bottom:6px;text-transform:capitalize}
+.dow.s{color:var(--sun)}
+.cell{display:flex;flex-direction:column;align-items:center;gap:5px;min-height:74px;padding-top:4px;border:0;background:transparent;color:var(--fg);cursor:default;border-radius:12px}
+.cell.has{cursor:pointer}
+.cell.has:active{background:var(--bg)}
+.cell .n{width:32px;height:32px;display:grid;place-items:center;font-size:16px;border-radius:50%}
+.cell.sun .n{color:var(--sun)}
+.cell.out{opacity:.35}
+.cell.today .n{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.chip{font:700 10.5px/1 var(--f-body);color:#fff;border-radius:4px;padding:4px;letter-spacing:.02em;max-width:100%;white-space:nowrap;overflow:hidden}
+
+.card{background:var(--card);border-radius:18px;box-shadow:var(--shadow)}
+.sum{margin-top:12px;padding:16px 18px}
+.sum-top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.lbl{color:var(--muted);font-size:14px}
+.big{font-size:26px;font-weight:700;color:var(--brand-text);font-variant-numeric:tabular-nums}
+.right{text-align:right}
+.right b{font-size:17px;display:block}
+.rows{display:flex;flex-direction:column;gap:12px;padding-top:12px}
+.row{display:grid;grid-template-columns:12px minmax(0,1fr) auto auto;gap:10px;align-items:center}
+.dot{width:12px;height:12px;border-radius:50%}
+.cnt{color:var(--muted);font-variant-numeric:tabular-nums}
+.val{font-variant-numeric:tabular-nums;min-width:84px;text-align:right}
+.countdown{margin-top:12px;padding:14px 18px;display:flex;align-items:center;gap:14px}
+.countdown .num{font:700 30px var(--f-body);color:var(--accent-text);min-width:44px;text-align:center}
+
+.sec{font-size:13px;font-weight:500;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;padding:18px 8px 8px}
+.list{overflow:hidden}
+.item,.day-row{display:flex;gap:14px;align-items:center;padding:12px 16px;border:0;border-bottom:1px solid var(--line);background:transparent;width:100%;text-align:left;color:var(--fg);cursor:pointer}
+.item:last-child,.day-row:last-child{border-bottom:0}
+.badge{width:44px;height:44px;border-radius:11px;color:#fff;display:grid;place-items:center;font:700 12px var(--f-body);flex:none}
+.item .t{font-size:17px;font-weight:500}
+.s{color:var(--muted);font-size:14px;margin-top:2px}
+.mid{min-width:0;flex:1}
+.day-row .d{width:44px;text-align:center;flex:none}
+.day-row .d b{display:block;font-size:20px}
+.day-row .d small{color:var(--muted);font-size:12px;text-transform:uppercase}
+
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--card);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+.tab{border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 0 10px;font-size:12.5px;cursor:pointer}
+.tab .ic{width:52px;height:30px;border-radius:999px;display:grid;place-items:center}
+.tab svg{width:22px;height:22px;fill:currentColor}
+.tab[aria-selected="true"]{color:var(--accent-text);font-weight:700}
+.tab[aria-selected="true"] .ic{background:var(--soft)}
+
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+.sheet-h{color:#fff;padding-top:calc(env(safe-area-inset-top,0px) + 10px);padding-bottom:16px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+.sheet-h .bar{display:flex;align-items:center;gap:4px}
+.sheet-h .bar .sp{flex:1}
+.sheet-h .navbtn{color:#fff}
+.sheet-h .date{font-size:14px;opacity:.92;padding:4px 8px 0}
+.sheet-h h2{font-size:24px;font-weight:500;margin:4px 8px 0;text-wrap:balance}
+.sheet-h .where{font-size:14px;opacity:.92;padding:6px 8px 0}
+.sheet-b{flex:1;overflow-y:auto;padding-block:12px 40px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px}
+.box{padding:14px 16px}
+.box h3{font-size:13px;font-weight:500;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;margin:0 0 10px}
+.leg{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1fr);align-items:center;gap:6px;padding:4px 0}
+.leg .p{font-size:16px;font-weight:500}
+.leg .h{font:500 20px var(--f-num)}
+.leg .mode{text-align:center;color:var(--accent-text)}
+.leg .mode svg{width:24px;height:24px;fill:currentColor}
+.leg .r{text-align:right}
+.leg-note{color:var(--muted);font-size:13px;grid-column:1/-1}
+.tl .e{display:grid;grid-template-columns:84px minmax(0,1fr);gap:10px;padding:8px 0;border-bottom:1px solid var(--line);line-height:1.4}
+.tl .e:last-child{border-bottom:0}
+.tl .tm{font:500 13px var(--f-num);color:var(--brand-text);padding-top:2px}
+.tl .e.np{grid-template-columns:minmax(0,1fr)}
+.orig{font-size:12.5px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 10px;margin-bottom:6px}
+.exp{display:flex;flex-direction:column;gap:8px}
+.exp .x{display:flex;justify-content:space-between;gap:12px}
+.exp .x span:last-child{font-variant-numeric:tabular-nums;white-space:nowrap}
+.exp .tot{border-top:1px solid var(--line);padding-top:8px;font-weight:700}
+.hotel{font-size:16px;font-weight:500}
+.muted{color:var(--muted);font-size:14px}
+.bars{display:flex;flex-direction:column;gap:12px;padding-top:14px}
+.bar-r .top{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}
+.bar-r .tr{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar-r .fl{height:100%;border-radius:4px}
+
+.trip{display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.trip:last-child{border-bottom:0}
+.pick{flex:1;min-width:0;display:flex;gap:14px;align-items:center;padding:12px 16px;border:0;background:transparent;color:var(--fg);text-align:left;cursor:pointer}
+.pick .mid{display:flex;flex-direction:column}
+.pick .t{font-size:16px;font-weight:500}
+.radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--muted);flex:none}
+.trip.on .radio{border:6px solid var(--accent)}
+.del{border:0;background:transparent;color:var(--muted);padding:10px 16px;cursor:pointer;font-size:15px;white-space:nowrap}
+.del.armed{color:var(--sun);font-weight:700}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;line-height:1.4}
+.lnk{color:var(--brand-text)}
+a.btn{text-decoration:none}
+.albums{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding-top:6px}
+.alb{border:0;background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:0 0 12px;text-align:left;color:var(--fg);cursor:pointer;overflow:hidden;display:flex;flex-direction:column;gap:2px}
+.alb .cover{aspect-ratio:4/3;max-width:100%;display:grid;place-items:center;color:#fff;font-size:22px;margin-bottom:8px;overflow:hidden}
+.alb .cover img{width:100%;height:100%;object-fit:cover;display:block}
+.alb .an,.alb .s{padding:0 12px}
+.alb .an{font-size:16px;font-weight:500}
+.ph-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding-top:14px}
+.pgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding-top:10px}
+.ph{border:0;padding:0;aspect-ratio:1;max-width:100%;overflow:hidden;border-radius:6px;cursor:pointer;background:var(--line)}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.empty{display:flex;gap:14px;align-items:center;margin-top:12px;color:var(--muted)}
+.viewer{position:fixed;inset:0;z-index:25;background:#000;color:#fff;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.vbar,.vnav{display:flex;align-items:center;gap:6px;padding:6px max(10px,env(safe-area-inset-right,0px)) 6px max(10px,env(safe-area-inset-left,0px))}
+.vbar .sp{flex:1;text-align:center;font-size:14px;opacity:.8}
+.viewer .navbtn{color:#fff;font-size:22px;width:auto;min-width:44px;border-radius:999px}
+.viewer .armed{background:#c62828;font-size:15px;padding:0 14px}
+.vimg{flex:1;min-height:0;display:grid;place-items:center}
+.vimg img{max-width:100%;max-height:100%;object-fit:contain}
+.vnav{justify-content:space-between}
+.vdate{font-size:14px;opacity:.8}
+.selbar{display:flex;justify-content:space-between;align-items:center;padding-top:12px;gap:8px}
+.pill.dark{color:var(--brand-text);border-color:var(--line)}
+.ph{position:relative}
+.ph .tick{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.35);border:2px solid #fff;color:transparent;display:grid;place-items:center;font-size:14px;font-weight:700}
+.ph.sel .tick{background:var(--accent);color:#fff}
+.ph.sel img{opacity:.75}
+.igbar{position:fixed;left:0;right:0;bottom:calc(64px + env(safe-area-inset-bottom,0px));z-index:7;display:flex;justify-content:center;padding:0 16px}
+.btn.ig{background:linear-gradient(45deg,#f09433,#dc2743 50%,#bc1888);color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.modal{position:fixed;inset:0;z-index:26;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center}
+.mbox{width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px}
+.mt{margin:0;font-size:18px;display:flex;gap:8px;align-items:center}
+.opt{display:flex;flex-direction:column;gap:2px;text-align:left;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--card);color:var(--fg);cursor:pointer}
+.opt:disabled{opacity:.5;cursor:default}
+.opt b{font-size:16px}
+.small{font-size:13px}
+.langs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.lang{border:1.5px solid var(--line);background:var(--card);color:var(--fg);border-radius:12px;padding:12px;font-size:15px;cursor:pointer;text-align:left}
+.lang[aria-pressed="true"]{border-color:var(--accent);background:var(--soft);font-weight:700}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:11px 18px;font:500 15px var(--f-body);cursor:pointer;background:var(--brand);color:var(--brand-ink)}
+.btn.ghost{background:transparent;color:var(--brand-text);border:1.5px solid var(--line)}
+.stack{display:flex;flex-direction:column;gap:10px}
+.msg{font-size:14px;padding:8px 0 0}
+.msg.err{color:var(--sun)}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .22s ease-out}@keyframes up{from{transform:translateY(24px);opacity:.6}}}
+</style>
+
+<div class="app">
+  <header class="top"><div class="r1"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAWfmNhQlgAABZ+anVtYgAAAB5qdW1kYzJwYQARABCAAACqADibcQNjMnBhAAAAFlhqdW1iAAAAR2p1bWRjMm1hABEAEIAAAKoAOJtxA3VybjpjMnBhOmZlNmQ1ZDE1LWM3NmMtNDQ4MS04NDhlLTY0NTRhOTNjYTI2OQAAAAOTanVtYgAAAClqdW1kYzJhcwARABCAAACqADibcQNjMnBhLmFzc2VydGlvbnMAAAAAuGp1bWIAAABEanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5pbmdyZWRpZW50LnYzAAAAABhjMnNoB5QPheutt2bIEI/7jUnreQAAAGxjYm9yo2lkYzpmb3JtYXRpaW1hZ2UvcG5namluc3RhbmNlSUR4LHhtcDppaWQ6MDYzYTc2NGItNDBjNS00ZGY0LTk1YmUtYjBlZDY2NDk4NzE1bHJlbGF0aW9uc2hpcGhwYXJlbnRPZgAAAeJqdW1iAAAAQWp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuYWN0aW9ucy52MgAAAAAYYzJzaPt0Axg6lS/kp3f9gjmImTYAAAGZY2JvcqJnYWN0aW9uc4KiZmFjdGlvbmtjMnBhLm9wZW5lZGpwYXJhbWV0ZXJzoWtpbmdyZWRpZW50c4GiY3VybHgtc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5pbmdyZWRpZW50LnYzZGhhc2hYIAyUBaMaSR/rPvZ9sHCUQsmJXjlyLGQmg7DiNwFGnEUtpGZhY3Rpb254HWNvbS5hbnRocm9waWMuY2xhdWRlLnByb3ZpZGVkanBhcmFtZXRlcnOheB9jb20uYW50aHJvcGljLm9yaWdpbi1jb25maWRlbmNlZ3Vua25vd25rZGVzY3JpcHRpb254ZkNsYXVkZSBwcm92aWRlZCB0aGlzIGZpbGUgYXQgdGhlIHJlcXVlc3Qgb2YgYSB1c2VyIGFuZCBtYXkgaGF2ZSBjcmVhdGVkIG9yIG1vZGlmaWVkIHRoZSBmaWxlIGNvbnRlbnRzLm1zb2Z0d2FyZUFnZW50oWRuYW1lZkNsYXVkZXJhbGxBY3Rpb25zSW5jbHVkZWT1AAAAyGp1bWIAAABAanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5oYXNoLmRhdGEAAAAAGGMyc2iA9dIDiZ3fo3I9qbbwg+/+AAAAgGNib3KlY2FsZ2ZzaGEyNTZjcGFkTQAAAAAAAAAAAAAAAABkaGFzaFggKc1LIKQBCbDPsMefp53QEtmQfmGE0JtjuiHe/rOrjuJkbmFtZW5qdW1iZiBtYW5pZmVzdGpleGNsdXNpb25zgaJlc3RhcnQYIWZsZW5ndGgZFooAAAI+anVtYgAAACdqdW1kYzJjbAARABCAAACqADibcQNjMnBhLmNsYWltLnYyAAAAAg9jYm9ypWNhbGdmc2hhMjU2aXNpZ25hdHVyZXhNc2VsZiNqdW1iZj0vYzJwYS91cm46YzJwYTpmZTZkNWQxNS1jNzZjLTQ0ODEtODQ4ZS02NDU0YTkzY2EyNjkvYzJwYS5zaWduYXR1cmVqaW5zdGFuY2VJRHgseG1wOmlpZDozY2FmMDgxMC1hZTU1LTQ4M2ItYWFiZC0xOWQzZjIzMjNkZmFyY3JlYXRlZF9hc3NlcnRpb25zg6JjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggDJQFoxpJH+s+9n2wcJRCyYleOXIsZCaDsOI3AUacRS2iY3VybHgqc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5hY3Rpb25zLnYyZGhhc2hYIMowAT69dwDpeQeoq6amDktlTynUhwt4seZ/2csqx/t3omN1cmx4KXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaGFzaC5kYXRhZGhhc2hYIFjOlF2wASNxdMdU/Q/xOHjcCL5Qt2WcZVdXENI1h6XDdGNsYWltX2dlbmVyYXRvcl9pbmZvo2RuYW1lb0FudGhyb3BpYyBGaWxlc2d2ZXJzaW9uZTEuMC4wa3NwZWNWZXJzaW9uZTIuNC4wAAAQOGp1bWIAAAAoanVtZGMyY3MAEQAQgAAAqgA4m3EDYzJwYS5zaWduYXR1cmUAAAAQCGNib3LShFkCEqIBJhghWQIKMIICBjCCAY2gAwIBAgIUQOWgCu7COdC+uIP6BkIFPWdVEwAwCgYIKoZIzj0EAwMwSTEXMBUGA1UEChMOQW50aHJvcGljLCBQQkMxLjAsBgNVBAMTJUFudGhyb3BpYyBDb250ZW50IENyZWRlbnRpYWxzIFJvb3QgQ0EwHhcNMjYwODA3MTg0MzU2WhcNMjgwODA2MTk0MzU2WjBEMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEpMCcGA1UEAxMgQW50aHJvcGljIENsYXVkZSBDb250ZW50IFNpZ25pbmcwWTATBgcqhkjOPQIBBggqhkjOPQMBBwNCAASYegpry1AYBRTVNL1CpTlbROnY3dey+UrsF9C3phYrATN3ZHf93Mo8RQN0KOUuOn19P4oWNFWe5n2/She9N7eTo1gwVjAOBgNVHQ8BAf8EBAMCB4AwFQYDVR0lBA4wDAYKKwYBBAGD6F4CATAMBgNVHRMBAf8EAjAAMB8GA1UdIwQYMBaAFM5R4gSBTmRbI/jjxM+aPpzB11zCMAoGCCqGSM49BAMDA2cAMGQCMDFzHRSeAXrSy1WOzkbhPZ6Km2wGTmZ/2gK18k8BQGXyqz88Rdrz6CTX9flAnYNVxgIwcF9c3fVhqmJKpi+UhasNUMko69cyX6STPfta3Q8EjyzDjzoyrol46FP6VFHhvUcJoWNwYWRZDZ4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2WEB/hCbB9ghQyQ0yH+Mc0oUeHu7fBA7DE9YWn9+G8f4CVvg+zC1m79tiG8xepol+pHx1Plm7FJJuIgoOwSlWMs3AbwykEwAAB5ZJREFUeJzsWmuMW8UVnpk7Y99re6+96/U+7Oxmu0nbgIAoIYEKmkQC1JSqFQW1Ei2VitQWpNI/qEqF1FaqhFSE0h8V0Ae0aqO2CCFVStokXSmhlWiVgmCBmCRiE9hssht73+u3fZ8zzPV1bO+us9f2Jpgo/rSy53Fm7vnOOTNz5noxYwxcz0DgOkebQKvRJtBqtAm0Gjc2AWU8mhg5YCTnQVPgAxMjf+aTgHWgeQLZ0demX3iSmfqlZx7V4uOgQfAhsWceZYYx/fyTmdHjoFnAplOJC099NbLvDyTYnz7xT+XMmz2P/bKh4bN//Kl00x3y3Q/oSzPxZ7+/8dkjoCk07wFt4jTXnhdIZ4/ahAdi4yTQYw3v6lMvnAbN4rpfxLhOOTM5pxz9nT55hi7N1OiNf7S0bzdoBGY6V10tD0ddfWTjLeJXHhcCvfXMUxcB5X+v5v/1EjB0cO3BDaQuzWinX5f2/kDc87CjvHMImZfGCkdfXKE9X/qCVy5VBAyFej1ZBsQYXB6FPPKKvYTpemHkJWPyA8d5nAnkDv6amcbKx0OIMMl/8JYlcPJ1BBveyhBgueh/eYFPggjhE64Q4A/NH37OcR5ny9HFWM12X2fg0tPf9t56lz59wSe5QIOQRFfuxCHtfDR36v+BgY2A1ojPmuttBZw8UMiauVTNHoHq3ZEwnj4ruwFCDe9mfEiHG6L4WDASFmjt1cX4o6m59jxOHpB8cM1+4naDdcAlimv0WqGLBLAm2tloq3EDnMRC/zD4FKMeApvApxg3TDJXRkFnSYVmVJbRWE6jvFowgGowAbKkCgzKNBO4BZDTrNzAzg/4Icv3Yi+BGgVEABjBgAhMCt0YSgRIGHpdqMMF+bEQEJFE4FUjcOpcLDo29dZr2UtZNDavmwxOpxQ+fX+nJ6MYAs9kEGYC0RkyANGwl5+mPMOwdm5MIKWW1hCVGHBfY0INjZMCjEIiYjVNgEGgCXijqZm60SHh+EKGUw4HfQKgN/e6I6K60/vmbVsGbv1c5EpKXvFGtm//wb8dflsK9CzkGCA+SFyQSBC7kSBwhQgRvBLxipj/YYwyiplRWEY1LY2hBUtpVCwjWGxBlRarF9ntJXlbptjLKKWawtQs1Qo0kwgSNX3x3CNf3rb/xw805gEXgQVXSBE/gz18XrAh5L1lUB7o8Qz1eodCng4PLnm6lIRZUUIZmEvr8aQ2uageiSYTeQOWOCBW/Az7SV/A1d1Bgl4si4LbJfAo4uHncSGNQsVgCcsKdD7PpjN0Nmf5UOd5oulyXTlQrtizZ8dnDxw9oxBia/Cdezby79mUNno+MxJdTOZpTjPzqrUMeKbq9xDZQ3wi9nuJLOE+PxFFggxUtr1t411b/AUdLOTMibie03XN5AsGKiY3FmeC3ASJBPTLOOwXNoXQP8YKfBS3jzsd23P7fQ0TuHPrsESYyhNdK1GDvzoyxSyHW5lJlV15mc8AkxpK6ibMADZfsTrE5LKMNQP//PupPJ+hqsWKRkSgzrMeCvMa5ZxnFR0V9SYuy/O8DJjKlWmYgL9D6vZLiUIS+XtB0X6oYku+UouxXGopxnfxD62K8poydn9xUdjrxW5Z3Q4LsYmQz8WVaZgAx+Pf/MJTB07C0AYGYNmutgdYqWy3F1sqZWF1Cyvmz3yJFhkyy662lqCicalluYw5dfaxB+9YQ0mH90KD9/5M2Xyv4PWv3Ftq7ySoWsZIzJrJGd6Cu/rcoXDFrqhqW4JlvZfbviijJRbSR14eH/lF8wQuxBZ2ffcFc/tDlbivXgOrPGOXtbmLIHosLBlb/NZd9GyGxAvYtfN+MTyIyvYGrFQWkF1ezWT2L8//58UfDvR3raGhw0k8FOk+9KCw9+W/kju/IXR0Xo7Ty3pXl4tPpdkl+M7hu+TMj/aiHRF+zyT2PG/HtN+ePPTOadm96+tiV9AeV5lmud6ciZZYHD/w++OPdKytPajn1WL2laenUubXXs0pXcN06HYeD2U/VMeuOnUOnntjA878ZAe4b1Pta9rxcXX/uzDOZGnbF+XNW6rsXYn7/HQsO3oCTn148CEpLAu+b/0crJ+AXXjl/cJzozo/ZUjPoOIJ4o5Opub4CxUUP+sxc8M+/Ynt+J5h5xvmv8+rv3mPXixglfjcm29m1CQ+n7q0SNLzqYmJXi98Yht++DaPLXw1CdiIpc3RmDaZoqpBDQb7vHBTF97aR2SxscQ2pdDojP7RkjmbpQQBkcBBv7AjTLjVq8UcCTScjUZkISJLYN3wi2j3kHv3EFgn2nfiVqPhEBJCA9BX2dpYLmnyXZ+Dp/jhzZXXONQ0Z8aZWmhuyDUk4Lrpbp5nVeq6Vihqgzd8ngxvXSaKBGMi2tyQ+tEwgWWqrK5erSF1w3kNIDm4rL5i261UV2/HrPkh9qODYeAEZw+gQC9NL5ar+oejAFfHg2J/m/NT1r2sCubcZNNDbAidfcAJzgcZTc7lj/0JmJ/EzzPLIBDP3u8hf2htqTpCKNAj7rwffOLgD3XUHtT/OzFNL6jvHqOpBZZPgWsJ6PEjf7d7+5eQ3F2XfPt/5lqMNoFWo02g1WgTaDXaBFqNNoFW42MAAAD//6o/KjQAAAAGSURBVAMACZgSPoH/oNQAAAAASUVORK5CYII="><span class="brand">G-Travel</span><div class="flags" id="flags" role="group" aria-label="Idioma"></div></div><div class="r2"><h1 id="ttl"></h1><div class="hb" id="hbtns"></div></div></header>
+  <main id="main"></main>
+</div>
+<nav class="tabs"><div class="in" role="tablist">
+  <button class="tab" role="tab" data-tab="cal"><span class="ic"><svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V10h14v10zM7 12h5v5H7z"/></svg></span><span data-t="tabCal"></span></button>
+  <button class="tab" role="tab" data-tab="loc"><span class="ic"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span><span data-t="tabLoc"></span></button>
+  <button class="tab" role="tab" data-tab="fot"><span class="ic"><svg viewBox="0 0 24 24"><path d="M9 3 7.2 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.2L15 3H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg></span><span data-t="tabFot"></span></button>
+  <button class="tab" role="tab" data-tab="gas"><span class="ic"><svg viewBox="0 0 24 24"><path d="M21 7H3V5h18v2zm0 2H3a1 1 0 0 0-1 1v8a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-8a1 1 0 0 0-1-1zm-4 7a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></span><span data-t="tabGas"></span></button>
+  <button class="tab" role="tab" data-tab="cfg"><span class="ic"><svg viewBox="0 0 24 24"><path d="M19.4 13a7.5 7.5 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.5 7.5 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg></span><span data-t="tabCfg"></span></button>
+</div></nav>
+<div id="sheet" hidden></div>
+
+<!-- Dados do roteiro: troque só este bloco (ou o arquivo roteiro.json) para outra viagem -->
+<script type="application/json" id="trip-data">{"app":"G-Travel","trip":{"pt":"Viagem de exemplo","en":"Sample trip","es":"Viaje de ejemplo","zh":"示例行程"},"traveler":"Viajante","currency":"BRL","sourceLanguage":"pt","cities":{"LIS":{"code":"LIS","name":{"pt":"Lisboa","en":"Lisbon","es":"Lisboa","zh":"里斯本"},"country":{"pt":"Portugal","en":"Portugal","es":"Portugal","zh":"葡萄牙"},"color":"#ec6f35"},"POR":{"code":"POR","name":{"pt":"Porto","en":"Porto","es":"Oporto","zh":"波尔图"},"country":{"pt":"Portugal","en":"Portugal","es":"Portugal","zh":"葡萄牙"},"color":"#1a4f8b"}},"days":[{"date":"2026-12-10","city":"LIS","title":{"pt":"Chegada em Lisboa","en":"Arrival in Lisbon","es":"Llegada a Lisboa","zh":"抵达里斯本"},"legs":[],"text":{"pt":"15:00 Check-in no hotel\n17:00 Passeio pela Baixa\n20:00 Jantar"},"hotel":"Hotel de exemplo","hotelNote":null,"hotelCost":400,"tickets":0,"expenses":[["Alimentação",150]]},{"date":"2026-12-11","city":"LIS","title":{"pt":"Belém e Alfama","en":"Belém and Alfama","es":"Belém y Alfama","zh":"贝伦与阿尔法玛"},"legs":[],"text":{"pt":"9:30 Torre de Belém\n11:00 Pastéis de Belém\n15:00 Bonde 28 até Alfama\n19:00 Fado"},"hotel":"Hotel de exemplo","hotelNote":null,"hotelCost":400,"tickets":80,"expenses":[["Alimentação",180]]},{"date":"2026-12-12","city":"POR","title":{"pt":"Trem para o Porto","en":"Train to Porto","es":"Tren a Oporto","zh":"乘火车去波尔图"},"legs":[{"from":"Lisboa","dep":"09:00","to":"Porto","arr":"11:50","mode":"trem"}],"text":{"pt":"13:00 Ribeira\n16:00 Ponte Luís I\n20:00 Jantar"},"hotel":"Hotel de exemplo","hotelNote":null,"hotelCost":350,"tickets":120,"expenses":[["Alimentação",160]]}]}</script>
+
+<script>
+/* ---------- textos da interface ---------- */
+const I18N={
+pt:{tabCal:'Calendário',tabLoc:'Cidades',tabFot:'Fotos',postIg:'Postar no Instagram',tapAgain:'Pronto. Toque de novo na opção para abrir o compartilhamento.',select:'Selecionar',cancel:'Cancelar',nPhotos:n=>n===1?'1 foto selecionada':`${n} fotos selecionadas`,story:'Story',feed:'Feed',storyHint:'A foto vai no formato vertical do story, com o nome da cidade.',storyOne:'O story aceita uma foto por vez. Selecione só uma.',feedHint:'As fotos vão juntas, em carrossel (até 10).',feedMax:'O feed aceita até 10 fotos por post.',igHow:'No menu que abrir, toque em Instagram. O Instagram confirma se é Feed ou Story.',preparing:'Preparando…',shareFail:'Não consegui abrir o compartilhamento. Tente de novo.',noShare:'Este navegador não permite compartilhar fotos. Use o app instalado (Chrome no Android, Safari no iPhone).',noShareSave:'Aqui não dá para abrir o Instagram direto. Salve a foto no celular e poste pelo Instagram.',tapToSel:'Toque nas fotos para selecionar',photosTitle:'Fotos da viagem',photos:n=>n===0?'Nenhuma foto':n===1?'1 foto':`${n} fotos`,photosIntro:'Escolha uma cidade para ver as fotos ou adicionar novas. As fotos ficam guardadas neste celular.',takePhoto:'Tirar foto',fromGallery:'Da galeria',noPhotos:'Ainda não há fotos desta cidade. Tire uma foto ou escolha da galeria.',saving:'Salvando fotos…',noStore:'Não consegui guardar fotos neste navegador.',delPhoto:'Apagar foto',tabGas:'Gastos',tabCfg:'Ajustes',list:'Lista',month:'Mês',today:'Hoje',
+ citiesTitle:'Cidades da viagem',costsTitle:'Gastos previstos',cfgTitle:'Ajustes',
+ daysToTrip:n=>n===1?'dia para a viagem':'dias para a viagem',departure:(c,d,h)=>`Saída de ${c} em ${d} às ${h}`,
+ costsIn:m=>`Gastos previstos em ${m}`,days:n=>n===1?'1 dia':`${n} dias`,cities:n=>n===1?'1 cidade':`${n} cidades`,
+ nights:n=>n===1?'1 noite':`${n} noites`,to:'a',backHome:'Volta para casa',
+ dayOf:(i,n)=>`Dia ${i} de ${n}`,nightIn:c=>`Noite em ${c}`,nightPlane:'Noite no avião',
+ travel:'Deslocamento',stay:'Hospedagem',plan:'Programação',dayCosts:'Gastos do dia',total:'Total',
+ tickets:'Passagens',lodging:'Hospedagem (diária)',totalTrip:'Total previsto da viagem',perDay:'/dia',byCity:'Por cidade',
+ cat:{tickets:'Passagens',lodging:'Hospedagem',food:'Alimentação',tours:'Passeios e ingressos',local:'Transporte local',other:'Outros (chip, internet, taxas)'},
+ costsNote:'Passagens entram no dia do voo.',original:l=>`Detalhes no idioma original (${l})`,
+ language:'Idioma',tripSec:'Roteiro',traveler:'Viajante',period:'Período',openOther:'Abrir outro roteiro (.json)',
+ restore:'Voltar ao roteiro original',loaded:'Roteiro carregado.',badFile:'Esse arquivo não é um roteiro do G-Travel.',
+ howNew:'Para criar um roteiro para outra pessoa, gere um arquivo roteiro.json no mesmo formato e abra-o aqui.',closeLbl:'Fechar',prevDay:'Dia anterior',nextDay:'Próximo dia'},
+en:{tabCal:'Calendar',tabLoc:'Cities',tabFot:'Photos',postIg:'Post to Instagram',tapAgain:'Ready. Tap the option again to open sharing.',select:'Select',cancel:'Cancel',nPhotos:n=>n===1?'1 photo selected':`${n} photos selected`,story:'Story',feed:'Feed',storyHint:'The photo is fitted to the vertical story format, with the city name.',storyOne:'Stories take one photo at a time. Select just one.',feedHint:'Photos go together as a carousel (up to 10).',feedMax:'A feed post takes up to 10 photos.',igHow:'In the menu that opens, tap Instagram. Instagram then asks Feed or Story.',preparing:'Preparing…',shareFail:'Could not open sharing. Try again.',noShare:'This browser cannot share photos. Use the installed app (Chrome on Android, Safari on iPhone).',noShareSave:'Instagram cannot open from here. Save the photo to your phone and post it from Instagram.',tapToSel:'Tap photos to select them',photosTitle:'Trip photos',photos:n=>n===0?'No photos':n===1?'1 photo':`${n} photos`,photosIntro:'Pick a city to see its photos or add new ones. Photos are saved on this phone.',takePhoto:'Take photo',fromGallery:'From gallery',noPhotos:'No photos for this city yet. Take one or pick from your gallery.',saving:'Saving photos…',noStore:'Could not save photos in this browser.',delPhoto:'Delete photo',tabGas:'Costs',tabCfg:'Settings',list:'List',month:'Month',today:'Today',
+ citiesTitle:'Trip cities',costsTitle:'Planned costs',cfgTitle:'Settings',
+ daysToTrip:n=>n===1?'day to go':'days to go',departure:(c,d,h)=>`Leaving ${c} on ${d} at ${h}`,
+ costsIn:m=>`Planned costs in ${m}`,days:n=>n===1?'1 day':`${n} days`,cities:n=>n===1?'1 city':`${n} cities`,
+ nights:n=>n===1?'1 night':`${n} nights`,to:'to',backHome:'Back home',
+ dayOf:(i,n)=>`Day ${i} of ${n}`,nightIn:c=>`Night in ${c}`,nightPlane:'Night on the plane',
+ travel:'Getting there',stay:'Where to stay',plan:'Schedule',dayCosts:'Costs for the day',total:'Total',
+ tickets:'Tickets',lodging:'Lodging (per night)',totalTrip:'Planned trip total',perDay:'/day',byCity:'By city',
+ cat:{tickets:'Flights and trains',lodging:'Lodging',food:'Food',tours:'Tours and tickets',local:'Local transport',other:'Other (SIM, internet, fees)'},
+ costsNote:'Tickets are counted on the travel day.',original:l=>`Details in the original language (${l})`,
+ language:'Language',tripSec:'Itinerary',traveler:'Traveler',period:'Dates',openOther:'Open another itinerary (.json)',
+ restore:'Back to the original itinerary',loaded:'Itinerary loaded.',badFile:'This file is not a G-Travel itinerary.',
+ howNew:'To make an itinerary for someone else, create a roteiro.json file in the same format and open it here.',closeLbl:'Close',prevDay:'Previous day',nextDay:'Next day'},
+es:{tabCal:'Calendario',tabLoc:'Ciudades',tabFot:'Fotos',postIg:'Publicar en Instagram',tapAgain:'Listo. Toca de nuevo la opción para abrir el menú de compartir.',select:'Seleccionar',cancel:'Cancelar',nPhotos:n=>n===1?'1 foto seleccionada':`${n} fotos seleccionadas`,story:'Historia',feed:'Feed',storyHint:'La foto se ajusta al formato vertical de historia, con el nombre de la ciudad.',storyOne:'La historia acepta una foto por vez. Selecciona solo una.',feedHint:'Las fotos van juntas, en carrusel (hasta 10).',feedMax:'El feed acepta hasta 10 fotos por publicación.',igHow:'En el menú que se abre, toca Instagram. Instagram confirma si es Feed o Historia.',preparing:'Preparando…',shareFail:'No pude abrir el menú de compartir. Inténtalo de nuevo.',noShare:'Este navegador no permite compartir fotos. Usa la app instalada (Chrome en Android, Safari en iPhone).',noShareSave:'Desde aquí no se puede abrir Instagram. Guarda la foto en el celular y publícala desde Instagram.',tapToSel:'Toca las fotos para seleccionarlas',photosTitle:'Fotos del viaje',photos:n=>n===0?'Sin fotos':n===1?'1 foto':`${n} fotos`,photosIntro:'Elige una ciudad para ver sus fotos o agregar nuevas. Las fotos se guardan en este celular.',takePhoto:'Sacar foto',fromGallery:'De la galería',noPhotos:'Todavía no hay fotos de esta ciudad. Saca una o elige de la galería.',saving:'Guardando fotos…',noStore:'No pude guardar fotos en este navegador.',delPhoto:'Borrar foto',tabGas:'Gastos',tabCfg:'Ajustes',list:'Lista',month:'Mes',today:'Hoy',
+ citiesTitle:'Ciudades del viaje',costsTitle:'Gastos previstos',cfgTitle:'Ajustes',
+ daysToTrip:n=>n===1?'día para el viaje':'días para el viaje',departure:(c,d,h)=>`Salida de ${c} el ${d} a las ${h}`,
+ costsIn:m=>`Gastos previstos en ${m}`,days:n=>n===1?'1 día':`${n} días`,cities:n=>n===1?'1 ciudad':`${n} ciudades`,
+ nights:n=>n===1?'1 noche':`${n} noches`,to:'al',backHome:'Vuelta a casa',
+ dayOf:(i,n)=>`Día ${i} de ${n}`,nightIn:c=>`Noche en ${c}`,nightPlane:'Noche en el avión',
+ travel:'Traslado',stay:'Alojamiento',plan:'Programa',dayCosts:'Gastos del día',total:'Total',
+ tickets:'Pasajes',lodging:'Alojamiento (noche)',totalTrip:'Total previsto del viaje',perDay:'/día',byCity:'Por ciudad',
+ cat:{tickets:'Pasajes',lodging:'Alojamiento',food:'Comida',tours:'Paseos y entradas',local:'Transporte local',other:'Otros (chip, internet, tasas)'},
+ costsNote:'Los pasajes cuentan en el día del viaje.',original:l=>`Detalles en el idioma original (${l})`,
+ language:'Idioma',tripSec:'Itinerario',traveler:'Viajero',period:'Fechas',openOther:'Abrir otro itinerario (.json)',
+ restore:'Volver al itinerario original',loaded:'Itinerario cargado.',badFile:'Este archivo no es un itinerario de G-Travel.',
+ howNew:'Para crear un itinerario para otra persona, genera un archivo roteiro.json con el mismo formato y ábrelo aquí.',closeLbl:'Cerrar',prevDay:'Día anterior',nextDay:'Día siguiente'},
+zh:{tabCal:'日历',tabLoc:'城市',tabFot:'照片',postIg:'发布到 Instagram',tapAgain:'已准备好。请再点一次该选项以打开分享。',select:'选择',cancel:'取消',nPhotos:n=>`已选 ${n} 张照片`,story:'快拍',feed:'帖子',storyHint:'照片会调整为竖版快拍格式，并显示城市名。',storyOne:'快拍一次只能发一张，请只选一张。',feedHint:'多张照片以轮播形式一起发布（最多 10 张）。',feedMax:'一条帖子最多 10 张照片。',igHow:'在弹出的菜单中点 Instagram，Instagram 会让你选择帖子或快拍。',preparing:'准备中…',shareFail:'无法打开分享，请重试。',noShare:'此浏览器不支持分享照片。请使用已安装的应用（安卓用 Chrome，iPhone 用 Safari）。',noShareSave:'这里无法直接打开 Instagram。请先把照片保存到手机，再在 Instagram 中发布。',tapToSel:'点按照片进行选择',photosTitle:'旅行照片',photos:n=>n===0?'暂无照片':`${n} 张照片`,photosIntro:'选择一个城市查看或添加照片。照片保存在这部手机上。',takePhoto:'拍照',fromGallery:'从相册选择',noPhotos:'这个城市还没有照片。拍一张或从相册选择。',saving:'正在保存照片…',noStore:'无法在此浏览器中保存照片。',delPhoto:'删除照片',tabGas:'花费',tabCfg:'设置',list:'列表',month:'月',today:'今天',
+ citiesTitle:'旅行城市',costsTitle:'预计花费',cfgTitle:'设置',
+ daysToTrip:n=>'天后出发',departure:(c,d,h)=>`${d} ${h} 从${c}出发`,
+ costsIn:m=>`${m}预计花费`,days:n=>`${n} 天`,cities:n=>`${n} 个城市`,
+ nights:n=>`${n} 晚`,to:'至',backHome:'回家',
+ dayOf:(i,n)=>`第 ${i} 天 / 共 ${n} 天`,nightIn:c=>`住在${c}`,nightPlane:'在飞机上过夜',
+ travel:'交通',stay:'住宿',plan:'行程',dayCosts:'当日花费',total:'合计',
+ tickets:'机票/车票',lodging:'住宿（每晚）',totalTrip:'旅行预计总花费',perDay:'/天',byCity:'按城市',
+ cat:{tickets:'机票和车票',lodging:'住宿',food:'餐饮',tours:'景点和门票',local:'市内交通',other:'其他（电话卡、网络、税费）'},
+ costsNote:'机票/车票计入出行当天。',original:l=>`详细内容为原语言（${l}）`,
+ language:'语言',tripSec:'行程',traveler:'旅行者',period:'日期',openOther:'打开其他行程 (.json)',
+ restore:'恢复原行程',loaded:'行程已加载。',badFile:'此文件不是 G-Travel 行程。',
+ howNew:'要为他人制作行程，请按相同格式生成 roteiro.json 文件并在此打开。',closeLbl:'关闭',prevDay:'前一天',nextDay:'后一天'}
+};
+
+const I18N_X={
+pt:{myTrips:'Meus roteiros',newTrip:'Criar roteiro a partir do Excel',remove:'Remover',confirmDel:'Remover?',
+ step1:'Baixe a planilha modelo em branco.',step2:'Preencha as abas Dias, Programação, Deslocamentos e Gastos.',step3:'Envie a planilha preenchida aqui. O app monta o roteiro sozinho.',
+ download:'Baixar planilha modelo',upload:'Enviar planilha preenchida',reading:'Lendo a planilha…',noDownload:'A planilha modelo pode ser baixada na versão instalada do app.',
+ err:{noDays:()=>'Não encontrei a aba "Dias" preenchida na planilha.',noCols:n=>`A aba "${n}" precisa das colunas "Data" e "Cidade onde dorme".`,
+  badDate:(n,l)=>`Data inválida na aba "${n}", linha ${l}. Use o formato 15/11/2026.`,dupDate:(n,l)=>`Data repetida na aba "${n}", linha ${l}. Cada dia aparece uma vez só.`,
+  noDay:(n,l)=>`A data da aba "${n}", linha ${l}, não está na aba "Dias".`,noLib:()=>'Não consegui abrir o leitor de Excel. Verifique a internet e tente de novo.',badFile:()=>'Não consegui ler esse arquivo. Use a planilha modelo do G-Travel.'}},
+en:{myTrips:'My itineraries',newTrip:'Create an itinerary from Excel',remove:'Remove',confirmDel:'Remove?',
+ step1:'Download the blank template spreadsheet.',step2:'Fill in the Dias, Programação, Deslocamentos and Gastos tabs.',step3:'Upload the completed spreadsheet here. The app builds the itinerary for you.',
+ download:'Download template',upload:'Upload completed spreadsheet',reading:'Reading the spreadsheet…',noDownload:'The template can be downloaded in the installed version of the app.',
+ err:{noDays:()=>'The "Dias" tab is missing or empty.',noCols:n=>`The "${n}" tab needs the "Data" and "Cidade onde dorme" columns.`,
+  badDate:(n,l)=>`Invalid date in tab "${n}", row ${l}. Use the format 15/11/2026.`,dupDate:(n,l)=>`Repeated date in tab "${n}", row ${l}. Each day appears only once.`,
+  noDay:(n,l)=>`The date in tab "${n}", row ${l}, is not in the "Dias" tab.`,noLib:()=>'Could not load the Excel reader. Check your connection and try again.',badFile:()=>'Could not read this file. Use the G-Travel template.'}},
+es:{myTrips:'Mis itinerarios',newTrip:'Crear itinerario desde Excel',remove:'Eliminar',confirmDel:'¿Eliminar?',
+ step1:'Descarga la planilla modelo en blanco.',step2:'Completa las pestañas Dias, Programação, Deslocamentos y Gastos.',step3:'Sube aquí la planilla completa. La app arma el itinerario sola.',
+ download:'Descargar planilla modelo',upload:'Subir planilla completa',reading:'Leyendo la planilla…',noDownload:'La planilla modelo se descarga en la versión instalada de la app.',
+ err:{noDays:()=>'No encontré la pestaña "Dias" completa.',noCols:n=>`La pestaña "${n}" necesita las columnas "Data" y "Cidade onde dorme".`,
+  badDate:(n,l)=>`Fecha inválida en la pestaña "${n}", fila ${l}. Usa el formato 15/11/2026.`,dupDate:(n,l)=>`Fecha repetida en la pestaña "${n}", fila ${l}. Cada día aparece una sola vez.`,
+  noDay:(n,l)=>`La fecha de la pestaña "${n}", fila ${l}, no está en la pestaña "Dias".`,noLib:()=>'No pude abrir el lector de Excel. Revisa la conexión e inténtalo de nuevo.',badFile:()=>'No pude leer este archivo. Usa la planilla modelo de G-Travel.'}},
+zh:{myTrips:'我的行程',newTrip:'用 Excel 创建行程',remove:'删除',confirmDel:'确定删除？',
+ step1:'下载空白模板表格。',step2:'填写 Dias、Programação、Deslocamentos 和 Gastos 工作表。',step3:'在此上传填好的表格，应用会自动生成行程。',
+ download:'下载模板表格',upload:'上传填好的表格',reading:'正在读取表格…',noDownload:'模板表格可在已安装的应用版本中下载。',
+ err:{noDays:()=>'找不到已填写的 "Dias" 工作表。',noCols:n=>`"${n}" 工作表需要 "Data" 和 "Cidade onde dorme" 两列。`,
+  badDate:(n,l)=>`"${n}" 工作表第 ${l} 行日期无效。请使用 15/11/2026 格式。`,dupDate:(n,l)=>`"${n}" 工作表第 ${l} 行日期重复。每天只能出现一次。`,
+  noDay:(n,l)=>`"${n}" 工作表第 ${l} 行的日期不在 "Dias" 工作表中。`,noLib:()=>'无法加载 Excel 读取器。请检查网络后重试。',badFile:()=>'无法读取此文件。请使用 G-Travel 模板。'}}};
+for(const k in I18N_X)Object.assign(I18N[k],I18N_X[k]);
+const LANGS={pt:{name:'Português',loc:'pt-BR',flag:'🇧🇷'},en:{name:'English',loc:'en-GB',flag:'🇺🇸'},es:{name:'Español',loc:'es-ES',flag:'🇪🇸'},zh:{name:'中文',loc:'zh-CN',flag:'🇨🇳'}};
+/* nomes comuns de gastos */
+const EXP={
+ 'Alimentação':{en:'Food',es:'Comida',zh:'餐饮'},'Gastos em geral':{en:'General expenses',es:'Gastos generales',zh:'日常花费'},
+ 'Taxa de turismo':{en:'Tourist tax',es:'Tasa turística',zh:'旅游税'},'Onibus Aeroporto':{en:'Airport bus',es:'Bus al aeropuerto',zh:'机场巴士'},
+ 'Chip de celular':{en:'Phone SIM',es:'Chip de celular',zh:'手机卡'},'Passagem Metrô':{en:'Metro tickets',es:'Billetes de metro',zh:'地铁票'},
+ 'Compra internet china':{en:'China internet plan',es:'Internet para China',zh:'中国上网套餐'},'Didi':{en:'Didi (ride app)',es:'Didi (app de transporte)',zh:'滴滴'},
+ 'Ingresso Shanghai tower':{en:'Shanghai Tower ticket',es:'Entrada Shanghai Tower',zh:'上海中心门票'},'Ingresso Disney':{en:'Disney ticket',es:'Entrada Disney',zh:'迪士尼门票'},
+ 'Authentic food':{en:'Local food tour',es:'Tour gastronómico',zh:'美食之旅'},'Ingresso 72 Wonder Tower':{en:'72 Wonder Tower ticket',es:'Entrada 72 Wonder Tower',zh:'七十二奇楼门票'},
+ 'Tianmen Mountain':{en:'Tianmen Mountain',es:'Montaña Tianmen',zh:'天门山'},'Trem para Furong':{en:'Train to Furong',es:'Tren a Furong',zh:'去芙蓉镇的火车'},
+ 'Taxa entrada furongzhen':{en:'Furong entry fee',es:'Entrada a Furong',zh:'芙蓉镇门票'},'Trem para Zhangjiajie':{en:'Train to Zhangjiajie',es:'Tren a Zhangjiajie',zh:'去张家界的火车'},
+ 'Parque Zhangjiajie':{en:'Zhangjiajie Park',es:'Parque Zhangjiajie',zh:'张家界国家森林公园'},'Jantar Típico':{en:'Traditional dinner show',es:'Cena típica',zh:'特色晚餐'},
+ 'Entrada no parque pandas':{en:'Panda base ticket',es:'Entrada base de pandas',zh:'大熊猫基地门票'},'Ingresso da muralha da china':{en:'Great Wall ticket',es:'Entrada Gran Muralla',zh:'长城门票'},
+ 'Descida de tobogã + teleferico':{en:'Toboggan + cable car',es:'Tobogán + teleférico',zh:'滑道+缆车'},'Guruwalk':{en:'GuruWalk tour',es:'Free tour GuruWalk',zh:'GuruWalk 徒步导览'}
+};
+const CAT_RULES=[['food',/aliment|jantar|food|gastos em geral|comida|meal/i],['local',/didi|metr|onibus|ônibus|trem|bus|taxi|uber/i],['tours',/ingress|guru|parque|tower|disney|tianmen|muralha|tobog|entrada|ticket|tour/i]];
+
+/* ---------- dados ---------- */
+const ORIGINAL=JSON.parse(document.getElementById('trip-data').textContent);ORIGINAL.id='original';
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{v===null?localStorage.removeItem(k):localStorage.setItem(k,v)}catch(e){}}};
+function validTrip(t){return t&&Array.isArray(t.days)&&t.days.length&&t.cities&&t.days.every(d=>d.date&&t.cities[d.city])}
+/* roteiros adicionados pela pessoa ficam guardados neste aparelho */
+let SAVED=[];try{SAVED=(JSON.parse(store.get('gtravel-trips')||'[]')||[]).filter(validTrip)}catch(e){}
+const allTrips=()=>[ORIGINAL,...SAVED];
+function saveTrips(){store.set('gtravel-trips',JSON.stringify(SAVED))}
+let TRIP=allTrips().find(t=>t.id===store.get('gtravel-current'))||ORIGINAL;
+let DAYS,CITIES,byDate;
+function setTrip(t){TRIP=t;DAYS=t.days;CITIES=t.cities;byDate=Object.fromEntries(DAYS.map((d,i)=>[d.date,i]));store.set('gtravel-current',t.id||'original')}
+setTrip(TRIP);
+
+/* ---------- leitura da planilha Excel ---------- */
+const XLSX_SRC='xlsx.mini.min.js';
+const TPL_B64='';
+function loadXlsx(){return window.XLSX?Promise.resolve(window.XLSX):new Promise((ok,no)=>{const s=document.createElement('script');s.src=XLSX_SRC;s.onload=()=>ok(window.XLSX);s.onerror=()=>no(new Error('lib'));document.head.appendChild(s)})}
+const norm=s=>String(s??'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();
+class SheetError extends Error{constructor(key,...a){super(key);this.key=key;this.args=a}}
+function xDate(v){
+  if(v==null||v==='')return null;
+  if(typeof v==='number'){const d=new Date(Date.UTC(1899,11,30)+Math.round(v)*864e5);return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`}
+  if(v instanceof Date)return iso(v.getFullYear(),v.getMonth(),v.getDate());
+  const s=String(v).trim();let m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return `${m[1]}-${pad(+m[2])}-${pad(+m[3])}`;
+  m=s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);if(m){const y=m[3].length===2?2000+ +m[3]:+m[3];return `${y}-${pad(+m[2])}-${pad(+m[1])}`}
+  return 'bad';
+}
+function xTime(v){
+  if(v==null||v==='')return null;
+  if(typeof v==='number'){const t=Math.round((v%1)*1440);return `${pad(Math.floor(t/60)%24)}:${pad(t%60)}`}
+  const m=String(v).trim().match(/^(\d{1,2})\s*[:h]\s*(\d{2})?/i);return m?`${pad(+m[1])}:${m[2]||'00'}`:String(v).trim();
+}
+const xNum=v=>{if(v==null||v==='')return 0;if(typeof v==='number')return v;const s=String(v).replace(/[^\d,.-]/g,'');const n=parseFloat(s.includes(',')?s.replace(/\./g,'').replace(',','.'):s);return isNaN(n)?0:n};
+function readSheet(wb,key){
+  const name=wb.SheetNames.find(n=>norm(n).startsWith(key));if(!name)return null;
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:true,defval:null});
+  const head=(rows[0]||[]).map(norm);
+  return {name,head,rows:rows.slice(1).map((r,i)=>({r,line:i+2})).filter(x=>x.r.some(c=>c!=null&&String(c).trim()!==''))};
+}
+const col=(sh,...keys)=>{if(!sh)return -1;for(const k of keys){const i=sh.head.findIndex(h=>h.startsWith(k));if(i>=0)return i}return -1};
+const PALETTE=['#ec6f35','#1565c0','#d9561f','#0288d1','#f5a274','#3949ab','#e2652a','#0097a7','#f08048','#0d47a1','#f0b8a1','#1e88e5'];
+function workbookToTrip(wb,srcLang){
+  const dias=readSheet(wb,'dia');if(!dias||!dias.rows.length)throw new SheetError('noDays');
+  const cD=col(dias,'data'),cC=col(dias,'cidade'),cP=col(dias,'pais'),cT=col(dias,'titulo'),cH=col(dias,'hotel'),cV=col(dias,'valor');
+  if(cD<0||cC<0)throw new SheetError('noCols',dias.name);
+  const cities={},byName={},days=[],seen={};
+  const cityKey=name=>{
+    const n=norm(name);
+    if(!n||/^(voo|em voo|aviao|flight|vuelo)$/.test(n)){if(!cities.VOO)cities.VOO={code:'VOO',name:{pt:'Em voo',en:'In flight',es:'En vuelo',zh:'飞行中'},country:null,color:'#78909c'};return 'VOO'}
+    if(byName[n])return byName[n];
+    let code=n.replace(/[^a-z]/g,'').slice(0,3).toUpperCase()||'CID',k=code,i=2;while(cities[k])k=code.slice(0,2)+i++;
+    cities[k]={code:k,name:String(name).trim(),country:null,color:PALETTE[Object.keys(cities).filter(x=>x!=='VOO').length%PALETTE.length]};
+    byName[n]=k;return k;
+  };
+  for(const {r,line} of dias.rows){
+    const date=xDate(r[cD]);if(!date||date==='bad')throw new SheetError('badDate',dias.name,line);
+    if(seen[date])throw new SheetError('dupDate',dias.name,line);seen[date]=1;
+    const k=cityKey(r[cC]);if(cP>=0&&r[cP]&&k!=='VOO')cities[k].country=String(r[cP]).trim();
+    if(k!=='VOO'&&!cities[k].country)cities[k].country='';
+    days.push({date,city:k,title:{[srcLang]:cT>=0&&r[cT]?String(r[cT]).trim():(k==='VOO'?'✈':cities[k].name)},legs:[],text:{[srcLang]:''},
+      hotel:cH>=0&&r[cH]?String(r[cH]).trim():null,hotelCost:cV>=0?xNum(r[cV]):0,tickets:0,expenses:[]});
+  }
+  days.sort((a,b)=>a.date<b.date?-1:1);
+  const idx=Object.fromEntries(days.map((d,i)=>[d.date,i]));
+  const dayOf=(sh,line,v)=>{const d=xDate(v);if(!d||d==='bad')throw new SheetError('badDate',sh.name,line);if(idx[d]===undefined)throw new SheetError('noDay',sh.name,line);return days[idx[d]]};
+  const pr=readSheet(wb,'program');
+  if(pr){const a=col(pr,'data'),h=col(pr,'hora'),t=col(pr,'ativ','descr');
+    for(const {r,line} of pr.rows){if(t<0||!r[t])continue;const d=dayOf(pr,line,r[a]),tm=h>=0?xTime(r[h]):null;
+      d.text[srcLang]+=(d.text[srcLang]?'\n':'')+(tm?tm+' ':'')+String(r[t]).trim()}}
+  const ds=readSheet(wb,'desloc');
+  if(ds){const a=col(ds,'data'),f=col(ds,'saida de','de','origem'),hs=col(ds,'horario de saida','saida'),to=col(ds,'chegada em','para','destino'),hc=col(ds,'horario de chegada','chegada'),m=col(ds,'transp'),v=col(ds,'valor'),o=col(ds,'obs');
+    for(const {r,line} of ds.rows){const d=dayOf(ds,line,r[a]),mode=norm(m>=0?r[m]:'');
+      const leg={from:f>=0&&r[f]?String(r[f]).trim():'',dep:hs>=0?xTime(r[hs]):null,to:to>=0&&r[to]?String(r[to]).trim():'',arr:hc>=0?xTime(r[hc]):null,
+        mode:/avi|voo|plane|fli/.test(mode)?'aviao':/trem|train|tren/.test(mode)?'trem':/onib|bus|carro|car/.test(mode)?'onibus':null};
+      if(o>=0&&r[o])leg.note=String(r[o]).trim();d.legs.push(leg);if(v>=0)d.tickets+=xNum(r[v])}}
+  const gs=readSheet(wb,'gasto');
+  if(gs){const a=col(gs,'data'),ds2=col(gs,'descr','item'),v=col(gs,'valor');
+    for(const {r,line} of gs.rows){const val=v>=0?xNum(r[v]):0;if(!val)continue;dayOf(gs,line,r[a]).expenses.push([ds2>=0&&r[ds2]?String(r[ds2]).trim():'—',val])}}
+  const vg=readSheet(wb,'viag'),info={};
+  if(vg)vg.rows.forEach(({r})=>info[norm(r[0])]=r[1]);
+  const pick=k=>{const e=Object.entries(info).find(([n])=>n.startsWith(k));return e&&e[1]!=null?String(e[1]).trim():''};
+  const cur=(pick('moeda')||'BRL').toUpperCase().slice(0,3);
+  return {app:'G-Travel',id:'t'+Date.now(),trip:pick('nome')||cities[days.find(d=>d.city!=='VOO')?.city]?.name||'Roteiro',traveler:pick('viajante'),
+    currency:/^[A-Z]{3}$/.test(cur)?cur:'BRL',sourceLanguage:srcLang,cities,days};
+}
+async function importFile(file){
+  if(/\.json$/i.test(file.name)){const t=JSON.parse(await file.text());if(!validTrip(t))throw new SheetError('badFile');t.id='t'+Date.now();return t}
+  const X=await loadXlsx().catch(()=>{throw new SheetError('noLib')});
+  const wb=X.read(await file.arrayBuffer(),{type:'array'});
+  return workbookToTrip(wb,lang);
+}
+
+let lang=store.get('gtravel-lang')||(navigator.language||'pt').slice(0,2);
+if(!I18N[lang])lang='pt';
+let st={tab:store.get('gtravel-tab')||'cal',view:store.get('gtravel-view')||'month',y:0,m:0};
+const T=()=>I18N[lang];
+const tx=o=>o==null?'':typeof o==='string'?o:(o[lang]??o[TRIP.sourceLanguage||'pt']??Object.values(o)[0]??'');
+const loc=()=>LANGS[lang].loc;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+const iso=(y,m,d)=>`${y}-${pad(m+1)}-${pad(d)}`;
+const parseD=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const money=(v,dec=2)=>new Intl.NumberFormat(loc(),{style:'currency',currency:TRIP.currency||'BRL',minimumFractionDigits:dec,maximumFractionDigits:dec}).format(v);
+const monthName=(y,m)=>new Intl.DateTimeFormat(loc(),{month:'long'}).format(new Date(y,m,1));
+const monthYear=(y,m)=>{const t=new Intl.DateTimeFormat(loc(),{month:'long',year:'numeric'}).format(new Date(y,m,1));return t.charAt(0).toUpperCase()+t.slice(1)};
+const dowShort=i=>new Intl.DateTimeFormat(loc(),{weekday:'short'}).format(new Date(2026,10,1+i)).replace('.','');
+const shortDate=s=>new Intl.DateTimeFormat(loc(),{day:'2-digit',month:'2-digit'}).format(parseD(s));
+const longDate=s=>new Intl.DateTimeFormat(loc(),{weekday:'long',day:'numeric',month:'long'}).format(parseD(s));
+const cityName=c=>tx(CITIES[c].name);
+const placeName=p=>{const k=Object.keys(CITIES).find(k=>tx(CITIES[k].name)===p||(CITIES[k].name&&CITIES[k].name.pt===p));return k?cityName(k):p};
+const expName=d=>lang==='pt'?d:(EXP[d]?.[lang]||d);
+const dayTotal=d=>(d.hotelCost||0)+(d.tickets||0)+(d.expenses||[]).reduce((s,e)=>s+e[1],0);
+const now=new Date();const TODAY=iso(now.getFullYear(),now.getMonth(),now.getDate());
+const hasTravel=d=>(d.legs||[]).length>0;
+const ICON={aviao:'<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>',
+ trem:'<svg viewBox="0 0 24 24"><path d="M12 2c-4 0-8 .5-8 4v9.5A3.5 3.5 0 0 0 7.5 19L6 20.5v.5h12v-.5L16.5 19a3.5 3.5 0 0 0 3.5-3.5V6c0-3.5-4-4-8-4zM7.5 17a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm3.5-7H6V6h5v4zm2 0V6h5v4h-5zm3.5 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>',
+ onibus:'<svg viewBox="0 0 24 24"><path d="M4 16c0 .9.4 1.7 1 2.2V20a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1h8v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-1.8c.6-.5 1-1.3 1-2.2V6c0-3.5-3.6-4-8-4S4 2.5 4 6v10zm3.5 1a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm9 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM18 11H6V6h12v5z"/></svg>'};
+function resetMonth(){const d=byDate[TODAY]!==undefined?parseD(TODAY):parseD(DAYS[0].date);st.y=d.getFullYear();st.m=d.getMonth()}
+resetMonth();
+const months=()=>{const a=[];DAYS.forEach(d=>{const x=parseD(d.date),k=x.getFullYear()*12+x.getMonth();if(!a.includes(k))a.push(k)});return a};
+
+const $=s=>document.querySelector(s);
+function save(){store.set('gtravel-tab',st.tab);store.set('gtravel-view',st.view)}
+function render(){
+  document.documentElement.lang=loc();
+  $('#flags').innerHTML=Object.entries(LANGS).map(([k,v])=>`<button class="flag" data-l="${k}" aria-pressed="${k===lang}" aria-label="${v.name}" title="${v.name}">${v.flag}</button>`).join('');
+  document.querySelectorAll('.flag').forEach(b=>b.onclick=()=>{lang=b.dataset.l;store.set('gtravel-lang',lang);if(cur!==null)openDay(cur);render()});
+  document.querySelectorAll('[data-t]').forEach(e=>e.textContent=T()[e.dataset.t]);
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===st.tab));
+  const H=$('#hbtns');H.innerHTML='';
+  if(st.tab==='cal'){
+    $('#ttl').textContent=T().tabCal;
+    H.innerHTML=`<button class="pill" id="bv">${st.view==='month'?T().list:T().month}</button><button class="pill" id="bh">${T().today}</button>`;
+    $('#bv').onclick=()=>{st.view=st.view==='month'?'list':'month';save();render()};
+    $('#bh').onclick=goToday;
+    st.view==='month'?renderMonth():renderList();
+  }else if(st.tab==='loc'){$('#ttl').textContent=T().citiesTitle;renderLoc()}
+  else if(st.tab==='fot'){$('#ttl').textContent=T().photosTitle;renderFotos()}
+  else if(st.tab==='gas'){$('#ttl').textContent=T().costsTitle;renderGas()}
+  else{$('#ttl').textContent=T().cfgTitle;renderCfg()}
+  $('#main').scrollTop=0;
+}
+function goToday(){
+  if(byDate[TODAY]!==undefined){openDay(byDate[TODAY]);return}
+  const t=parseD(TODAY),f=parseD(DAYS[0].date),d=t<f?f:parseD(DAYS[DAYS.length-1].date);
+  st.y=d.getFullYear();st.m=d.getMonth();st.view='month';save();render();
+}
+function chip(d){const c=CITIES[d.city];return `<span class="chip" style="background:${c.color}">${esc(c.code)}${hasTravel(d)?' ✈':''}</span>`}
+function renderMonth(){
+  const {y,m}=st,first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),ms=months(),k0=y*12+m;
+  let cells='';
+  for(let i=0;i<42;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
+    if(i===35&&d.getMonth()!==m)break;
+    const k=iso(d.getFullYear(),d.getMonth(),d.getDate()),idx=byDate[k],out=d.getMonth()!==m;
+    const cls=['cell',idx!==undefined?'has':'',d.getDay()===0?'sun':'',out?'out':'',k===TODAY?'today':''].join(' ');
+    cells+=`<button class="${cls}" ${idx!==undefined?`data-i="${idx}" aria-label="${esc(longDate(k))}: ${esc(tx(DAYS[idx].title))}"`:'tabindex="-1" aria-hidden="true"'}><span class="n">${d.getDate()}</span>${idx!==undefined?chip(DAYS[idx]):''}</button>`;
+  }
+  const inM=DAYS.filter(d=>{const x=parseD(d.date);return x.getMonth()===m&&x.getFullYear()===y});
+  const total=inM.reduce((s,d)=>s+dayTotal(d),0),per={};
+  inM.forEach(d=>{(per[d.city]=per[d.city]||{n:0,v:0});per[d.city].n++;per[d.city].v+=dayTotal(d)});
+  const rows=Object.entries(per).map(([c,o])=>`<div class="row"><span class="dot" style="background:${CITIES[c].color}"></span><span>${CITIES[c].country?esc(tx(CITIES[c].country))+' · ':''}${esc(cityName(c))}</span><span class="cnt">${o.n}×</span><span class="val">${money(o.v,0)}</span></div>`).join('');
+  const dl=Math.round((parseD(DAYS[0].date)-parseD(TODAY))/864e5),l0=DAYS[0].legs?.[0];
+  const cd=dl>0?`<div class="card countdown"><div class="num">${dl}</div><div><b>${T().daysToTrip(dl)}</b>${l0?`<div class="muted">${esc(T().departure(placeName(l0.from),shortDate(DAYS[0].date),l0.dep))}</div>`:''}</div></div>`:'';
+  $('#main').innerHTML=`<div class="cal">
+   <div class="cal-nav"><button class="navbtn" id="pv" aria-label="‹" ${k0<=ms[0]?'disabled':''}>‹</button><h2>${esc(monthYear(y,m))}</h2><button class="navbtn" id="nx" aria-label="›" ${k0>=ms[ms.length-1]?'disabled':''}>›</button></div>
+   <div class="grid">${[0,1,2,3,4,5,6].map(i=>`<div class="dow ${i===0?'s':''}">${esc(dowShort(i))}</div>`).join('')}${cells}</div></div>
+   <div class="wrap">${cd}
+   ${inM.length?`<div class="card sum"><div class="sum-top"><div><div class="lbl">${esc(T().costsIn(monthName(y,m)))}</div><div class="big">${money(total)}</div></div>
+   <div class="right"><b>${T().days(inM.length)}</b><span class="lbl">${T().cities(Object.keys(per).filter(c=>CITIES[c].country).length)}</span></div></div><div class="rows">${rows}</div></div>`:''}</div>`;
+  $('#pv').onclick=()=>{const k=k0-1;st.y=Math.floor(k/12);st.m=k%12;render()};
+  $('#nx').onclick=()=>{const k=k0+1;st.y=Math.floor(k/12);st.m=k%12;render()};
+  document.querySelectorAll('.cell.has').forEach(b=>b.onclick=()=>openDay(+b.dataset.i));
+}
+function renderList(){
+  let html='<div class="wrap">';
+  DAYS.forEach((d,i)=>{
+    const dt=parseD(d.date),newM=i===0||parseD(DAYS[i-1].date).getMonth()!==dt.getMonth(),c=CITIES[d.city];
+    if(newM)html+=(i?'</div>':'')+`<div class="sec">${esc(monthName(dt.getFullYear(),dt.getMonth()))}</div><div class="card list">`;
+    html+=`<button class="day-row" data-i="${i}"><div class="d"><b>${dt.getDate()}</b><small>${esc(dowShort(dt.getDay()))}</small></div>
+    <span class="badge" style="background:${c.color};width:40px;height:40px;font-size:10px">${esc(c.code)}</span>
+    <div class="mid"><div style="font-weight:500">${esc(tx(d.title))}</div><div class="s">${esc(cityName(d.city))}${hasTravel(d)?' · '+d.legs.map(l=>esc(placeName(l.from))+' → '+esc(placeName(l.to))).join(', '):''}</div></div></button>`;
+  });
+  $('#main').innerHTML=html+'</div></div>';
+  document.querySelectorAll('.day-row').forEach(b=>b.onclick=()=>openDay(+b.dataset.i));
+}
+/* cidades na ordem do roteiro; cada passagem por uma cidade é uma linha */
+function stays(){
+  const a=[];DAYS.forEach((d,i)=>{if(!CITIES[d.city].country)return;const p=a[a.length-1];
+    if(p&&p.city===d.city&&p.last===i-1){p.days.push(i);p.last=i;if(d.hotel)p.hotels.add(d.hotel);p.v+=dayTotal(d)}
+    else a.push({city:d.city,days:[i],last:i,hotels:new Set(d.hotel?[d.hotel]:[]),v:dayTotal(d)})});
+  return a;
+}
+function renderLoc(){
+  const a=stays(),lastI=DAYS.length-1;let html='<div class="wrap">',prevC=null;
+  a.forEach((s,j)=>{
+    const ct=tx(CITIES[s.city].country);
+    if(ct!==prevC){html+=(j?'</div>':'')+`<div class="sec">${esc(ct)}</div><div class="card list">`;prevC=ct}
+    const A=DAYS[s.days[0]],B=DAYS[s.last],n=s.days.length,home=s.last===lastI&&n===1&&!s.hotels.size;
+    const per=home?`${T().backHome} · ${shortDate(A.date)}`:`${T().nights(n)} · ${shortDate(A.date)}${n>1?' '+T().to+' '+shortDate(B.date):''}`;
+    html+=`<button class="item" data-i="${s.days[0]}"><span class="badge" style="background:${CITIES[s.city].color}">${esc(CITIES[s.city].code)}</span><div class="mid"><div class="t">${esc(cityName(s.city))}</div><div class="s">${per}</div>${s.hotels.size?`<div class="s">🛏 ${[...s.hotels].map(esc).join(', ')}</div>`:''}</div></button>`;
+  });
+  $('#main').innerHTML=html+'</div></div>';
+  document.querySelectorAll('.item').forEach(b=>b.onclick=()=>openDay(+b.dataset.i));
+}
+function catOf(desc){for(const[k,r]of CAT_RULES)if(r.test(desc))return k;return 'other'}
+/* ---------- fotos: guardadas neste aparelho (IndexedDB) ---------- */
+const PH={db:null,open(){if(this.db)return Promise.resolve(this.db);return new Promise((ok,no)=>{let r;try{r=indexedDB.open('gtravel-fotos',1)}catch(e){no(e);return}
+  r.onupgradeneeded=()=>{const s=r.result.createObjectStore('photos',{keyPath:'id'});s.createIndex('album',['trip','city'])};
+  r.onsuccess=()=>{this.db=r.result;ok(this.db)};r.onerror=()=>no(r.error)})},
+ async tx(mode,fn){const db=await this.open();return new Promise((ok,no)=>{const t=db.transaction('photos',mode),s=t.objectStore('photos');const res=fn(s);t.oncomplete=()=>ok(res&&res.result!==undefined?res.result:undefined);t.onerror=()=>no(t.error)})},
+ list(trip,city){return this.open().then(db=>new Promise((ok,no)=>{const q=db.transaction('photos').objectStore('photos').index('album').getAll([trip,city]);q.onsuccess=()=>ok(q.result.sort((a,b)=>a.taken-b.taken));q.onerror=()=>no(q.error)}))},
+ counts(trip){return this.open().then(db=>new Promise((ok,no)=>{const c={},cv={};const q=db.transaction('photos').objectStore('photos').openCursor();
+  q.onsuccess=()=>{const cur=q.result;if(!cur){ok({c,cv});return}const v=cur.value;if(v.trip===trip){c[v.city]=(c[v.city]||0)+1;if(!cv[v.city]||v.taken>cv[v.city].taken)cv[v.city]=v}cur.continue()};q.onerror=()=>no(q.error)}))},
+ add(rec){return this.tx('readwrite',s=>s.put(rec))},
+ del(id){return this.tx('readwrite',s=>s.delete(id))}};
+const urls=new Map();const blobUrl=(id,b)=>{if(!urls.has(id))urls.set(id,URL.createObjectURL(b));return urls.get(id)};
+async function shrink(file,max,q){
+  const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=URL.createObjectURL(file)});
+  const k=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight)),w=Math.round(img.naturalWidth*k),h=Math.round(img.naturalHeight*k);
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;cv.getContext('2d').drawImage(img,0,0,w,h);URL.revokeObjectURL(img.src);
+  return new Promise(ok=>cv.toBlob(ok,'image/jpeg',q));
+}
+let album=null;
+async function renderFotos(){
+  if(album)return renderAlbum();
+  const a=stays();let counts={c:{},cv:{}},err=false;
+  try{counts=await PH.counts(TRIP.id||'original')}catch(e){err=true}
+  if(st.tab!=='fot'||album)return;
+  const seen=new Set();let html='<div class="wrap">'+(err?`<p class="msg err">${T().noStore}</p>`:'')+`<p class="muted" style="padding:14px 8px 4px">${T().photosIntro}</p><div class="albums">`;
+  a.forEach(s=>{if(seen.has(s.city))return;seen.add(s.city);const c=CITIES[s.city],n=counts.c[s.city]||0,cv=counts.cv[s.city];
+    html+=`<button class="alb" data-c="${s.city}"><span class="cover" style="background:${c.color}">${cv?`<img alt="" src="${blobUrl(cv.id+'t',cv.thumb)}">`:`<b>${esc(c.code)}</b>`}</span>
+    <span class="an">${esc(cityName(s.city))}</span><span class="s">${T().photos(n)}</span></button>`});
+  $('#main').innerHTML=html+'</div></div>';
+  document.querySelectorAll('.alb').forEach(b=>b.onclick=()=>{album=b.dataset.c;render()});
+}
+async function renderAlbum(){
+  const c=CITIES[album];$('#ttl').textContent=cityName(album);
+  $('#hbtns').innerHTML=`<button class="pill" id="back">‹ ${T().tabFot}</button>`;$('#back').onclick=()=>{album=null;selMode=false;selected.clear();render()};
+  let list=[];try{list=await PH.list(TRIP.id||'original',album)}catch(e){}
+  if(st.tab!=='fot'||!album)return;
+  $('#main').innerHTML=`<div class="wrap"><div class="ph-actions">
+    <label class="btn" for="cam">📷 ${T().takePhoto}</label><input id="cam" type="file" accept="image/*" capture="environment" hidden>
+    <label class="btn ghost" for="gal">🖼 ${T().fromGallery}</label><input id="gal" type="file" accept="image/*" multiple hidden></div>
+    <div class="msg" id="pmsg" role="status"></div>
+    ${list.length?`<div class="selbar"><span class="muted">${selMode?T().tapToSel:''}</span><button class="pill dark" id="selb">${selMode?T().cancel:T().select}</button></div>`:''}
+    ${list.length?`<div class="pgrid">${list.map((p,i)=>`<button class="ph ${selected.has(p.id)?'sel':''}" data-i="${i}"><span class="tick">✓</span><img alt="" loading="lazy" src="${blobUrl(p.id+'t',p.thumb)}"></button>`).join('')}</div>`
+      :`<div class="card box empty"><span class="badge" style="background:${c.color}">${esc(c.code)}</span><div>${T().noPhotos}</div></div>`}</div>`;
+  const add=async e=>{const files=[...e.target.files];if(!files.length)return;const m=$('#pmsg');m.className='msg';m.textContent=T().saving;
+    try{for(const f of files){const full=await shrink(f,1920,.85),thumb=await shrink(f,420,.75);
+      await PH.add({id:'p'+Date.now()+Math.random().toString(36).slice(2,7),trip:TRIP.id||'original',city:album,taken:f.lastModified||Date.now(),full,thumb})}
+      renderAlbum()}catch(err){m.className='msg err';m.textContent=T().noStore}};
+  $('#cam').onchange=add;$('#gal').onchange=add;
+  document.querySelectorAll('.ph').forEach(b=>b.onclick=()=>{const p=list[+b.dataset.i];
+    if(!selMode){viewPhoto(list,+b.dataset.i);return}selected.has(p.id)?selected.delete(p.id):selected.add(p.id);b.classList.toggle('sel');updBar(list)});
+  const sb=$('#selb');if(sb)sb.onclick=()=>{selMode=!selMode;selected.clear();renderAlbum()};
+  updBar(list);
+}
+function updBar(list){let bar=$('#igbar');
+  if(!selMode||!selected.size){if(bar)bar.remove();return}
+  if(!bar){bar=document.createElement('div');bar.id='igbar';bar.className='igbar';$('#main').appendChild(bar)}
+  bar.innerHTML=`<button class="btn ig">${IG} ${T().postIg} (${selected.size})</button>`;
+  bar.firstChild.onclick=()=>shareSheet(list.filter(p=>selected.has(p.id)));
+}
+function viewPhoto(list,i){
+  const p=list[i],S=$('#sheet');cur=null;
+  S.innerHTML=`<div class="viewer" role="dialog"><div class="vbar"><button class="navbtn" id="vx" aria-label="${T().closeLbl}">✕</button><span class="sp">${i+1} / ${list.length}</span>
+    <button class="navbtn" id="vig" aria-label="${T().postIg}">${IG}</button><button class="navbtn" id="vd" aria-label="${T().delPhoto}">🗑</button></div>
+    <div class="vimg"><img alt="" src="${blobUrl(p.id,p.full)}"></div>
+    <div class="vnav"><button class="navbtn" id="vp" ${i===0?'disabled':''}>‹</button><span class="vdate">${esc(new Intl.DateTimeFormat(loc(),{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(p.taken)))}</span><button class="navbtn" id="vn" ${i===list.length-1?'disabled':''}>›</button></div></div>`;
+  S.hidden=false;const close=()=>{S.hidden=true;S.innerHTML=''};
+  $('#vig').onclick=()=>shareSheet([p]);
+  $('#vx').onclick=close;$('#vp').onclick=()=>viewPhoto(list,i-1);$('#vn').onclick=()=>viewPhoto(list,i+1);
+  $('#vd').onclick=async e=>{const b=e.currentTarget;if(!b.dataset.armed){b.dataset.armed=1;b.textContent=T().confirmDel;b.classList.add('armed');return}
+    await PH.del(p.id).catch(()=>{});close();renderAlbum()};
+}
+/* ---------- postar no Instagram (pelo menu de compartilhar do celular) ---------- */
+let selMode=false,selected=new Set();
+const IG='<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM12 2.5c-2.6 0-2.9 0-3.9.1-3.5.2-5.5 2.1-5.6 5.6C2.5 9.1 2.5 9.4 2.5 12s0 2.9.1 3.9c.2 3.5 2.1 5.5 5.6 5.6 1 .1 1.3.1 3.9.1s2.9 0 3.9-.1c3.5-.2 5.5-2.1 5.6-5.6.1-1 .1-1.3.1-3.9s0-2.9-.1-3.9c-.2-3.5-2.1-5.5-5.6-5.6-1-.1-1.3-.1-3.9-.1zm0 1.7c2.5 0 2.8 0 3.8.1 2.6.1 3.8 1.3 3.9 3.9.1 1 .1 1.3.1 3.8s0 2.8-.1 3.8c-.1 2.6-1.3 3.8-3.9 3.9-1 .1-1.3.1-3.8.1s-2.8 0-3.8-.1c-2.6-.1-3.8-1.3-3.9-3.9-.1-1-.1-1.3-.1-3.8s0-2.8.1-3.8C4.4 5.6 5.6 4.4 8.2 4.3c1-.1 1.3-.1 3.8-.1z"/></svg>';
+const blobImg=b=>new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=URL.createObjectURL(b)});
+async function storyImage(p){
+  const img=await blobImg(p.full),W=1080,H=1920,cv=document.createElement('canvas');cv.width=W;cv.height=H;const g=cv.getContext('2d');
+  const cover=Math.max(W/img.naturalWidth,H/img.naturalHeight),sm=document.createElement('canvas');sm.width=27;sm.height=48;
+  sm.getContext('2d').drawImage(img,(27-img.naturalWidth*cover/40)/2,(48-img.naturalHeight*cover/40)/2,img.naturalWidth*cover/40,img.naturalHeight*cover/40);
+  g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';g.drawImage(sm,0,0,W,H);g.fillStyle='rgba(0,0,0,.35)';g.fillRect(0,0,W,H);
+  const fit=Math.min((W-80)/img.naturalWidth,(H-360)/img.naturalHeight),w=img.naturalWidth*fit,h=img.naturalHeight*fit,x=(W-w)/2,y=(H-h)/2-20;
+  g.save();g.beginPath();g.roundRect?g.roundRect(x,y,w,h,28):g.rect(x,y,w,h);g.clip();g.drawImage(img,x,y,w,h);g.restore();
+  g.fillStyle='#ffffff';g.font='600 46px Roboto, sans-serif';g.textAlign='center';g.fillText('📍 '+cityName(p.city),W/2,y+h+90);
+  URL.revokeObjectURL(img.src);return new Promise(ok=>cv.toBlob(ok,'image/jpeg',.9));
+}
+function shareSheet(photos){
+  const S=$('#sheet'),one=photos.length===1;
+  S.innerHTML=`<div class="modal" role="dialog"><div class="mbox card">
+    <h3 class="mt">${IG} ${T().postIg}</h3><div class="muted">${T().nPhotos(photos.length)}</div>
+    <button class="opt" id="o-story" ${one?'':'disabled'}><b>${T().story}</b><span class="s">${one?T().storyHint:T().storyOne}</span></button>
+    <button class="opt" id="o-feed" ${photos.length>10?'disabled':''}><b>${T().feed}</b><span class="s">${photos.length>10?T().feedMax:T().feedHint}</span></button>
+    <div class="muted small">${T().igHow}</div><div class="msg" id="smsg" role="status"></div>
+    <button class="btn ghost" id="o-x">${T().cancel}</button></div></div>`;
+  S.hidden=false;const close=()=>{S.hidden=true;S.innerHTML=''};$('#o-x').onclick=close;
+  const mk=(b,i,tag)=>new File([b],`g-travel-${photos[0].city.toLowerCase()}-${tag}${i+1}.jpg`,{type:'image/jpeg'});
+  const ready={feed:Promise.resolve(photos.map((p,i)=>mk(p.full,i,''))),story:one?storyImage(photos[0]).then(b=>[mk(b,0,'story-')]):Promise.resolve([])};
+  const got={};ready.feed.then(f=>got.feed=f);ready.story.then(f=>got.story=f).catch(()=>{});
+  const go=async story=>{const m=$('#smsg');m.className='msg';
+    try{let files=got[story?'story':'feed'];
+      if(files&&navigator.canShare&&navigator.canShare({files})){try{await navigator.share({files});close()}catch(e){if(e.name==='NotAllowedError'){m.textContent=T().tapAgain}else if(e.name!=='AbortError'){m.className='msg err';m.textContent=T().shareFail}else m.textContent=''}return}
+      m.textContent=T().preparing;files=await ready[story?'story':'feed'];
+      if(navigator.canShare&&navigator.canShare({files})){m.textContent=T().tapAgain;return}
+      const d=window.claude?.use?await window.claude.use('downloads').catch(()=>null):null;
+      if(!d){m.className='msg err';m.textContent=T().noShare;return}
+      m.textContent=T().noShareSave;for(const f of files){try{await d.save({filename:f.name,data:f})}catch(e){break}}
+    }catch(e){m.className='msg err';m.textContent=T().shareFail}};
+  $('#o-story').onclick=()=>go(true);$('#o-feed').onclick=()=>go(false);
+}
+function renderGas(){
+  const c={tickets:0,lodging:0,food:0,tours:0,local:0,other:0};
+  DAYS.forEach(d=>{c.tickets+=d.tickets||0;c.lodging+=d.hotelCost||0;(d.expenses||[]).forEach(e=>c[catOf(e[0])]+=e[1])});
+  const tot=Object.values(c).reduce((a,b)=>a+b,0),max=Math.max(...Object.values(c))||1;
+  const cols=['#1a4f8b','#ec6f35','#1e88e5','#ecb39c','#5c8fc7','#9aa6b6'];
+  const per={};DAYS.forEach((d,i)=>{if(!CITIES[d.city].country)return;(per[d.city]=per[d.city]||{i,n:0,v:0});per[d.city].n++;per[d.city].v+=dayTotal(d)});
+  $('#main').innerHTML=`<div class="wrap"><div class="card sum"><div class="sum-top"><div><div class="lbl">${T().totalTrip}</div><div class="big">${money(tot)}</div></div><div class="right"><b>${T().days(DAYS.length)}</b><span class="lbl">${money(tot/DAYS.length,0)}${T().perDay}</span></div></div>
+   <div class="bars">${Object.entries(c).map(([k,v],i)=>`<div class="bar-r"><div class="top"><span>${T().cat[k]}</span><span class="val">${money(v,0)}</span></div><div class="tr"><div class="fl" style="width:${v/max*100}%;background:${cols[i]}"></div></div></div>`).join('')}</div></div>
+   <div class="sec">${T().byCity}</div><div class="card list">${Object.entries(per).filter(([k,x])=>x.v>0).map(([k,x])=>`<button class="item" data-i="${x.i}"><span class="badge" style="background:${CITIES[k].color}">${esc(CITIES[k].code)}</span><div class="mid"><div class="t">${esc(cityName(k))}</div><div class="s">${T().days(x.n)}</div></div><span class="val">${money(x.v,0)}</span></button>`).join('')}</div>
+   <p class="muted" style="padding:12px 8px">${T().costsNote}</p></div>`;
+  document.querySelectorAll('.item').forEach(b=>b.onclick=()=>openDay(+b.dataset.i));
+}
+function renderCfg(){
+  const tpl='modelo-g-travel.xlsx';
+  const tripRow=t=>{const f=t.days[0].date,l=t.days[t.days.length-1].date,on=t===TRIP;
+    return `<div class="trip ${on?'on':''}"><button class="pick" data-id="${esc(t.id)}" aria-pressed="${on}"><span class="radio"></span><span class="mid"><span class="t">${esc(tx(t.trip))}</span>
+    <span class="s">${t.traveler?esc(t.traveler)+' · ':''}${shortDate(f)} ${T().to} ${shortDate(l)} · ${T().days(t.days.length)}</span></span></button>
+    ${t.id!=='original'?`<button class="del" data-del="${esc(t.id)}" aria-label="${T().remove}">✕</button>`:''}</div>`};
+  $('#main').innerHTML=`<div class="wrap">
+   <div class="sec">${T().myTrips}</div>
+   <div class="card list">${allTrips().map(tripRow).join('')}</div>
+   <div class="sec">${T().newTrip}</div>
+   <div class="card box stack">
+     <ol class="steps"><li>${T().step1}</li><li>${T().step2}</li><li>${T().step3}</li></ol>
+     ${tpl?`<a class="btn ghost" href="${tpl}" download>⬇ ${T().download}</a>`:TPL_B64?`<button class="btn ghost" id="dl" hidden>⬇ ${T().download}</button><div class="muted" id="nodl">${T().noDownload}</div>`:`<div class="muted">${T().noDownload}</div>`}
+     <label class="btn" for="file">⬆ ${T().upload}</label><input id="file" type="file" accept=".xlsx,.xls,.json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+     <div class="msg" id="msg" role="status"></div>
+   </div></div>`;
+  const dl=$('#dl');if(dl&&window.claude?.use)window.claude.use('downloads').then(d=>{if(!d||!document.body.contains(dl))return;dl.hidden=false;$('#nodl').hidden=true;
+    dl.onclick=()=>{const bin=atob(TPL_B64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);
+      d.save({filename:'modelo-g-travel.xlsx',data:new Blob([u])}).catch(()=>{})}}).catch(()=>{});
+  document.querySelectorAll('.pick').forEach(b=>b.onclick=()=>{const t=allTrips().find(x=>x.id===b.dataset.id);if(t){setTrip(t);resetMonth();renderCfg()}});
+  document.querySelectorAll('.del').forEach(b=>b.onclick=()=>{
+    if(b.dataset.armed){SAVED=SAVED.filter(t=>t.id!==b.dataset.del);saveTrips();if(TRIP.id===b.dataset.del){setTrip(ORIGINAL);resetMonth()}renderCfg();return}
+    b.dataset.armed=1;b.textContent=T().confirmDel;b.classList.add('armed')});
+  $('#file').onchange=async e=>{const file=e.target.files[0];if(!file)return;const msg=$('#msg');msg.className='msg';msg.textContent=T().reading;
+    try{const t=await importFile(file);SAVED.push(t);saveTrips();setTrip(t);resetMonth();st.tab='cal';st.view='month';save();render()}
+    catch(err){msg.className='msg err';msg.textContent=err instanceof SheetError&&T().err[err.key]?T().err[err.key](...err.args):T().err.badFile()}
+    e.target.value=''};
+}
+function timeline(text){
+  return text.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    let m=l.match(/^(\d{1,2}[:h]\d{2}(?:\s*[–-]\s*\d{1,2}[:h]\d{2})?)(?:\s*em diante)?\s*[-–:\t ]\s*(.+)$/);
+    if(m)return `<div class="e"><span class="tm">${m[1].replace(/h/g,':').replace(/\s/g,'')}</span><span>${esc(m[2].replace(/^[-–]\s*/,''))}</span></div>`;
+    m=l.match(/^(Manh[ãa]|Tarde|Noite|Jantar|Almoço|Dia|Depois do jantar)[^:]{0,22}:\s*(.+)$/i);
+    if(m)return `<div class="e"><span class="tm">${esc(m[1])}</span><span>${esc(m[2])}</span></div>`;
+    return `<div class="e np"><span>${esc(l)}</span></div>`;
+  }).join('');
+}
+let cur=null;
+function openDay(i){
+  cur=i;const d=DAYS[i],c=CITIES[d.city],S=$('#sheet');
+  const legs=(d.legs||[]).map(l=>`<div class="leg"><div><div class="h">${esc(l.dep||'')}</div><div class="p">${esc(placeName(l.from))}</div></div><div class="mode">${ICON[l.mode]||''}</div><div class="r"><div class="h">${esc(l.arr||'')}</div><div class="p">${esc(placeName(l.to))}</div></div>${l.note?`<div class="leg-note">${esc(tx(l.note))}</div>`:''}</div>`).join('');
+  const ex=[...(d.tickets?[[T().tickets,d.tickets]]:[]),...(d.hotelCost?[[T().lodging,d.hotelCost]]:[]),...(d.expenses||[]).map(e=>[expName(e[0]),e[1]])];
+  const txt=d.text&&(d.text[lang]||d.text[TRIP.sourceLanguage||'pt']||''),src=TRIP.sourceLanguage||'pt';
+  const origNote=d.text&&!d.text[lang]&&lang!==src?`<div class="orig">${esc(T().original(LANGS[src]?.name||src))}</div>`:'';
+  S.innerHTML=`<div class="sheet" role="dialog" aria-label="${esc(tx(d.title))}"><div class="sheet-h" style="background:${c.color}">
+   <div class="bar"><button class="navbtn" id="sx" aria-label="${T().closeLbl}">✕</button><span class="sp"></span><button class="navbtn" id="sp" aria-label="${T().prevDay}" ${i===0?'disabled':''}>‹</button><button class="navbtn" id="sn" aria-label="${T().nextDay}" ${i===DAYS.length-1?'disabled':''}>›</button></div>
+   <div class="date">${esc(longDate(d.date))} · ${T().dayOf(i+1,DAYS.length)}</div>
+   <h2>${esc(tx(d.title))}</h2><div class="where">${c.country?esc(T().nightIn(cityName(d.city))):T().nightPlane}</div></div>
+   <div class="sheet-b">
+   ${legs?`<div class="card box"><h3>${T().travel}</h3>${legs}</div>`:''}
+   ${d.hotel?`<div class="card box"><h3>${T().stay}</h3><div class="hotel">${esc(d.hotel)}</div>${d.hotelNote?`<div class="muted">${esc(tx(d.hotelNote))}</div>`:''}</div>`:''}
+   ${txt?`<div class="card box"><h3>${T().plan}</h3>${origNote}<div class="tl">${timeline(txt)}</div></div>`:''}
+   ${ex.length?`<div class="card box"><h3>${T().dayCosts}</h3><div class="exp">${ex.map(e=>`<div class="x"><span>${esc(e[0])}</span><span>${money(e[1])}</span></div>`).join('')}<div class="x tot"><span>${T().total}</span><span>${money(dayTotal(d))}</span></div></div></div>`:''}
+   </div></div>`;
+  S.hidden=false;
+  $('#sx').onclick=closeDay;$('#sp').onclick=()=>openDay(i-1);$('#sn').onclick=()=>openDay(i+1);
+}
+function closeDay(){const S=$('#sheet');if(cur===null)return;S.hidden=true;S.innerHTML='';const d=parseD(DAYS[cur].date);cur=null;
+  if(st.tab==='cal'&&st.view==='month'){st.y=d.getFullYear();st.m=d.getMonth();render()}}
+document.addEventListener('keydown',e=>{if(cur===null)return;if(e.key==='Escape')closeDay();if(e.key==='ArrowRight'&&cur<DAYS.length-1)openDay(cur+1);if(e.key==='ArrowLeft'&&cur>0)openDay(cur-1)});
+let tx0=null;document.addEventListener('touchstart',e=>{if(cur!==null)tx0=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{if(cur===null||tx0===null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>70){if(dx<0&&cur<DAYS.length-1)openDay(cur+1);if(dx>0&&cur>0)openDay(cur-1)}},{passive:true});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{album=null;selMode=false;selected.clear();st.tab=b.dataset.tab;save();closeDay();render()});
+render();
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+fetch('roteiro.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(t=>{if(validTrip(t)&&TRIP===ORIGINAL&&JSON.stringify(t)!==JSON.stringify(ORIGINAL)){ORIGINAL_SET(t)}}).catch(()=>{});
+function ORIGINAL_SET(t){setTrip(t);resetMonth();render()}
+</script>
+</body></html>

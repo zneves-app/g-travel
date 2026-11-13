@@ -1,0 +1,128 @@
+{
+ "app": "G-Travel",
+ "trip": {
+  "pt": "Viagem de exemplo",
+  "en": "Sample trip",
+  "es": "Viaje de ejemplo",
+  "zh": "示例行程"
+ },
+ "traveler": "Viajante",
+ "currency": "BRL",
+ "sourceLanguage": "pt",
+ "cities": {
+  "LIS": {
+   "code": "LIS",
+   "name": {
+    "pt": "Lisboa",
+    "en": "Lisbon",
+    "es": "Lisboa",
+    "zh": "里斯本"
+   },
+   "country": {
+    "pt": "Portugal",
+    "en": "Portugal",
+    "es": "Portugal",
+    "zh": "葡萄牙"
+   },
+   "color": "#ec6f35"
+  },
+  "POR": {
+   "code": "POR",
+   "name": {
+    "pt": "Porto",
+    "en": "Porto",
+    "es": "Oporto",
+    "zh": "波尔图"
+   },
+   "country": {
+    "pt": "Portugal",
+    "en": "Portugal",
+    "es": "Portugal",
+    "zh": "葡萄牙"
+   },
+   "color": "#1a4f8b"
+  }
+ },
+ "days": [
+  {
+   "date": "2026-12-10",
+   "city": "LIS",
+   "title": {
+    "pt": "Chegada em Lisboa",
+    "en": "Arrival in Lisbon",
+    "es": "Llegada a Lisboa",
+    "zh": "抵达里斯本"
+   },
+   "legs": [],
+   "text": {
+    "pt": "15:00 Check-in no hotel\n17:00 Passeio pela Baixa\n20:00 Jantar"
+   },
+   "hotel": "Hotel de exemplo",
+   "hotelNote": null,
+   "hotelCost": 400,
+   "tickets": 0,
+   "expenses": [
+    [
+     "Alimentação",
+     150
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-11",
+   "city": "LIS",
+   "title": {
+    "pt": "Belém e Alfama",
+    "en": "Belém and Alfama",
+    "es": "Belém y Alfama",
+    "zh": "贝伦与阿尔法玛"
+   },
+   "legs": [],
+   "text": {
+    "pt": "9:30 Torre de Belém\n11:00 Pastéis de Belém\n15:00 Bonde 28 até Alfama\n19:00 Fado"
+   },
+   "hotel": "Hotel de exemplo",
+   "hotelNote": null,
+   "hotelCost": 400,
+   "tickets": 80,
+   "expenses": [
+    [
+     "Alimentação",
+     180
+    ]
+   ]
+  },
+  {
+   "date": "2026-12-12",
+   "city": "POR",
+   "title": {
+    "pt": "Trem para o Porto",
+    "en": "Train to Porto",
+    "es": "Tren a Oporto",
+    "zh": "乘火车去波尔图"
+   },
+   "legs": [
+    {
+     "from": "Lisboa",
+     "dep": "09:00",
+     "to": "Porto",
+     "arr": "11:50",
+     "mode": "trem"
+    }
+   ],
+   "text": {
+    "pt": "13:00 Ribeira\n16:00 Ponte Luís I\n20:00 Jantar"
+   },
+   "hotel": "Hotel de exemplo",
+   "hotelNote": null,
+   "hotelCost": 350,
+   "tickets": 120,
+   "expenses": [
+    [
+     "Alimentação",
+     160
+    ]
+   ]
+  }
+ ]
+}
