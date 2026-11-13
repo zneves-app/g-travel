@@ -571,11 +571,11 @@ async function renderFotos(){
     html+=`<button class="alb" data-c="${s.city}"><span class="cover" style="background:${c.color}">${cv?`<img alt="" src="${blobUrl(cv.id+'t',cv.thumb)}">`:`<b>${esc(c.code)}</b>`}</span>
     <span class="an">${esc(cityName(s.city))}</span><span class="s">${T().photos(n)}</span></button>`});
   $('#main').innerHTML=html+'</div></div>';
-  document.querySelectorAll('.alb').forEach(b=>b.onclick=()=>{album=b.dataset.c;render()});
+  document.querySelectorAll('.alb').forEach(b=>b.onclick=()=>{album=b.dataset.c;render();pushNav('album')});
 }
 async function renderAlbum(){
   const c=CITIES[album];$('#ttl').textContent=cityName(album);
-  $('#hbtns').innerHTML=`<button class="pill" id="back">‹ ${T().tabFot}</button>`;$('#back').onclick=()=>{album=null;selMode=false;selected.clear();render()};
+  $('#hbtns').innerHTML=`<button class="pill" id="back">‹ ${T().tabFot}</button>`;$('#back').onclick=()=>goBack(()=>{album=null;selMode=false;selected.clear();render()});
   let list=[];try{list=await PH.list(TRIP.id||'original',album)}catch(e){}
   if(st.tab!=='fot'||!album)return;
   $('#main').innerHTML=`<div class="wrap"><div class="ph-actions">
@@ -602,16 +602,16 @@ function updBar(list){let bar=$('#igbar');
   bar.firstChild.onclick=()=>shareSheet(list.filter(p=>selected.has(p.id)));
 }
 function viewPhoto(list,i){
-  const p=list[i],S=$('#sheet');cur=null;
+  const p=list[i],S=$('#sheet');cur=null;const wasOpen=!S.hidden;
   S.innerHTML=`<div class="viewer" role="dialog"><div class="vbar"><button class="navbtn" id="vx" aria-label="${T().closeLbl}">✕</button><span class="sp">${i+1} / ${list.length}</span>
     <button class="navbtn" id="vig" aria-label="${T().postIg}">${IG}</button><button class="navbtn" id="vd" aria-label="${T().delPhoto}">🗑</button></div>
     <div class="vimg"><img alt="" src="${blobUrl(p.id,p.full)}"></div>
     <div class="vnav"><button class="navbtn" id="vp" ${i===0?'disabled':''}>‹</button><span class="vdate">${esc(new Intl.DateTimeFormat(loc(),{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(p.taken)))}</span><button class="navbtn" id="vn" ${i===list.length-1?'disabled':''}>›</button></div></div>`;
-  S.hidden=false;const close=()=>{S.hidden=true;S.innerHTML=''};
+  S.hidden=false;if(wasOpen)replaceNav('photo');else pushNav('photo');const close=()=>goBack(()=>{S.hidden=true;S.innerHTML=''});
   $('#vig').onclick=()=>shareSheet([p]);
   $('#vx').onclick=close;$('#vp').onclick=()=>viewPhoto(list,i-1);$('#vn').onclick=()=>viewPhoto(list,i+1);
   $('#vd').onclick=async e=>{const b=e.currentTarget;if(!b.dataset.armed){b.dataset.armed=1;b.textContent=T().confirmDel;b.classList.add('armed');return}
-    await PH.del(p.id).catch(()=>{});close();renderAlbum()};
+    await PH.del(p.id).catch(()=>{});S.hidden=true;S.innerHTML='';goBack(()=>{});renderAlbum()};
 }
 /* ---------- postar no Instagram (pelo menu de compartilhar do celular) ---------- */
 let selMode=false,selected=new Set();
@@ -628,14 +628,14 @@ async function storyImage(p){
   URL.revokeObjectURL(img.src);return new Promise(ok=>cv.toBlob(ok,'image/jpeg',.9));
 }
 function shareSheet(photos){
-  const S=$('#sheet'),one=photos.length===1;
+  const S=$('#sheet'),one=photos.length===1,wasOpen=!S.hidden;
   S.innerHTML=`<div class="modal" role="dialog"><div class="mbox card">
     <h3 class="mt">${IG} ${T().postIg}</h3><div class="muted">${T().nPhotos(photos.length)}</div>
     <button class="opt" id="o-story" ${one?'':'disabled'}><b>${T().story}</b><span class="s">${one?T().storyHint:T().storyOne}</span></button>
     <button class="opt" id="o-feed" ${photos.length>10?'disabled':''}><b>${T().feed}</b><span class="s">${photos.length>10?T().feedMax:T().feedHint}</span></button>
     <div class="muted small">${T().igHow}</div><div class="msg" id="smsg" role="status"></div>
     <button class="btn ghost" id="o-x">${T().cancel}</button></div></div>`;
-  S.hidden=false;const close=()=>{S.hidden=true;S.innerHTML=''};$('#o-x').onclick=close;
+  S.hidden=false;if(wasOpen)replaceNav('modal');else pushNav('modal');const close=()=>goBack(()=>{S.hidden=true;S.innerHTML=''});$('#o-x').onclick=close;
   const mk=(b,i,tag)=>new File([b],`g-travel-${photos[0].city.toLowerCase()}-${tag}${i+1}.jpg`,{type:'image/jpeg'});
   const ready={feed:Promise.resolve(photos.map((p,i)=>mk(p.full,i,''))),story:one?storyImage(photos[0]).then(b=>[mk(b,0,'story-')]):Promise.resolve([])};
   const got={};ready.feed.then(f=>got.feed=f);ready.story.then(f=>got.story=f).catch(()=>{});
@@ -710,7 +710,7 @@ function inviteSheet(t){
     <textarea id="ilink" class="linkbox" readonly rows="2" aria-label="link"></textarea>
     <div class="msg" id="imsg" role="status"></div>
     <button class="btn ghost" id="ix">${T().closeLbl}</button></div></div>`;
-  S.hidden=false;const close=()=>{S.hidden=true;S.innerHTML=''};$('#ix').onclick=close;
+  S.hidden=false;pushNav('modal');const close=()=>goBack(()=>{S.hidden=true;S.innerHTML=''});$('#ix').onclick=close;
   const make=async()=>{busy=true;$('#ish').disabled=$('#icp').disabled=true;
     link=appUrl()+'#convite='+await packTrip(t,$('#ic').checked);$('#ilink').value=link;busy=false;$('#ish').disabled=$('#icp').disabled=false};
   $('#ic').onchange=make;make();
@@ -752,11 +752,11 @@ async function openInvite(code){
     ${installBlock()}
     ${isIOS()&&!isStandalone()?`<div class="muted small">${T().iosPaste}</div><button class="btn ghost" id="wcp">${T().copyLink}</button>`:''}
     <div class="msg" id="wmsg" role="status"></div></div></div>`;
-  S.hidden=false;wireInstall(S);
-  const done=async()=>{await addInvited(t,key);S.hidden=true;S.innerHTML='';st.tab='cal';st.view='month';save();render()};
+  try{history.replaceState(navState('root'),'',location.pathname+location.search)}catch(e){}
+  S.hidden=false;wireInstall(S);pushNav('modal');
+  const done=async()=>{await addInvited(t,key);S.hidden=true;S.innerHTML='';st.tab='cal';st.view='month';save();render();replaceNav('tab')};
   $('#wadd').onclick=done;
   const cp=$('#wcp');if(cp)cp.onclick=()=>{navigator.clipboard?.writeText(link).then(()=>{$('#wmsg').textContent=T().copied}).catch(()=>{})};
-  try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 }
 async function pasteInvite(v){const m=String(v).match(/#?convite=([A-Za-z0-9_-]+)/);if(!m)throw new Error('bad');const t=await unpackTrip(m[1]);await addInvited(t,await tripKey(m[1]))}
 function renderGas(){
@@ -819,7 +819,7 @@ function timeline(text){
 }
 let cur=null;
 function openDay(i){
-  cur=i;const d=DAYS[i],c=CITIES[d.city],S=$('#sheet');
+  const wasDay=cur!==null;cur=i;const d=DAYS[i],c=CITIES[d.city],S=$('#sheet');
   const legs=(d.legs||[]).map(l=>`<div class="leg"><div><div class="h">${esc(l.dep||'')}</div><div class="p">${esc(placeName(l.from))}</div></div><div class="mode">${ICON[l.mode]||''}</div><div class="r"><div class="h">${esc(l.arr||'')}</div><div class="p">${esc(placeName(l.to))}</div></div>${l.note?`<div class="leg-note">${esc(tx(l.note))}</div>`:''}</div>`).join('');
   const ex=[...(d.tickets?[[T().tickets,d.tickets]]:[]),...(d.hotelCost?[[T().lodging,d.hotelCost]]:[]),...(d.expenses||[]).map(e=>[expName(e[0]),e[1]])];
   const txt=d.text&&(d.text[lang]||d.text[TRIP.sourceLanguage||'pt']||''),src=TRIP.sourceLanguage||'pt';
@@ -834,16 +834,29 @@ function openDay(i){
    ${txt?`<div class="card box"><h3>${T().plan}</h3>${origNote}<div class="tl">${timeline(txt)}</div></div>`:''}
    ${ex.length?`<div class="card box"><h3>${T().dayCosts}</h3><div class="exp">${ex.map(e=>`<div class="x"><span>${esc(e[0])}</span><span>${money(e[1])}</span></div>`).join('')}<div class="x tot"><span>${T().total}</span><span>${money(dayTotal(d))}</span></div></div></div>`:''}
    </div></div>`;
-  S.hidden=false;
-  $('#sx').onclick=closeDay;$('#sp').onclick=()=>openDay(i-1);$('#sn').onclick=()=>openDay(i+1);
+  S.hidden=false;if(wasDay)replaceNav('day');else pushNav('day');
+  $('#sx').onclick=()=>goBack(closeDay);$('#sp').onclick=()=>openDay(i-1);$('#sn').onclick=()=>openDay(i+1);
 }
 function closeDay(){const S=$('#sheet');if(cur===null)return;S.hidden=true;S.innerHTML='';const d=parseD(DAYS[cur].date);cur=null;
   if(st.tab==='cal'&&st.view==='month'){st.y=d.getFullYear();st.m=d.getMonth();render()}}
-document.addEventListener('keydown',e=>{if(cur===null)return;if(e.key==='Escape')closeDay();if(e.key==='ArrowRight'&&cur<DAYS.length-1)openDay(cur+1);if(e.key==='ArrowLeft'&&cur>0)openDay(cur-1)});
+document.addEventListener('keydown',e=>{if(cur===null)return;if(e.key==='Escape')goBack(closeDay);if(e.key==='ArrowRight'&&cur<DAYS.length-1)openDay(cur+1);if(e.key==='ArrowLeft'&&cur>0)openDay(cur-1)});
 let tx0=null;document.addEventListener('touchstart',e=>{if(cur!==null)tx0=e.touches[0].clientX},{passive:true});
 document.addEventListener('touchend',e=>{if(cur===null||tx0===null)return;const dx=e.changedTouches[0].clientX-tx0;tx0=null;if(Math.abs(dx)>70){if(dx<0&&cur<DAYS.length-1)openDay(cur+1);if(dx>0&&cur>0)openDay(cur-1)}},{passive:true});
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{album=null;selMode=false;selected.clear();st.tab=b.dataset.tab;save();closeDay();render()});
-render();
+/* ---------- botão Voltar do celular (Android / gesto do iPhone) ---------- */
+let restoring=false;
+const OVERLAY={day:1,photo:1,modal:1,album:1};
+const navState=kind=>({g:1,tab:st.tab,view:st.view,album,day:cur,kind});
+function pushNav(kind){if(restoring)return;try{history.pushState(navState(kind),'')}catch(e){}}
+function replaceNav(kind){if(restoring)return;try{history.replaceState(navState(kind),'')}catch(e){}}
+function goBack(fallback){const s=history.state;if(s&&s.g&&OVERLAY[s.kind])history.back();else fallback()}
+window.addEventListener('popstate',e=>{const s=e.state;if(!s||!s.g)return;restoring=true;
+  const S=$('#sheet'),wasDay=cur;S.hidden=true;S.innerHTML='';cur=null;
+  st.tab=s.tab;album=s.album||null;selMode=false;selected.clear();
+  if(wasDay!==null&&st.tab==='cal'&&st.view==='month'){const d=parseD(DAYS[wasDay].date);st.y=d.getFullYear();st.m=d.getMonth()}
+  save();render();if(s.kind==='day'&&s.day!=null&&DAYS[s.day])openDay(s.day);restoring=false});
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{const s=history.state,over=s&&s.g&&OVERLAY[s.kind]&&s.kind!=='album';
+  album=null;selMode=false;selected.clear();st.tab=b.dataset.tab;save();closeDay();render();if(over)replaceNav('tab');else pushNav('tab')});
+render();replaceNav('root');
 if(/^#convite=/.test(location.hash))openInvite(location.hash.slice(9));
 window.addEventListener('hashchange',()=>{if(/^#convite=/.test(location.hash))openInvite(location.hash.slice(9))});
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
